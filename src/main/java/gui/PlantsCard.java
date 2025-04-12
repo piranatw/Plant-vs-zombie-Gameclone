@@ -1,12 +1,11 @@
 package gui;
 
-import base.PeaShooterCard;
+import base.Plant;
 
-public class PlantsCard implements Cloneable{
-	private PeaShooterCard peaShooterCard = new PeaShooterCard(); 
-	
-	public PlantsCard() {
-		super();
+public class PlantsCard extends Plant{
+
+	public PlantsCard(int cooldown,int price) {
+		super(cooldown,price);
 	}
 	
 	

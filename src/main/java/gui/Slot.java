@@ -1,35 +1,51 @@
 package gui;
-
-
+import base.CherryBombCard;
+import base.FrostyPeaShooterCard;
+import base.PeaShooterCard;
+import base.PotatoMineCard;
+import base.SunflowerCard;
+import base.Sunny;
+import base.WallnutCard;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class Slot extends HBox{
-	private VBox sunBox;
-	private PlantsCard card1;
-	private PlantsCard card2;
-	private PlantsCard card3;
-	private PlantsCard card4;
-	private PlantsCard card5;
-	private PlantsCard card6;
-	private VBox excavator;
-	
-	public Slot() {
-	    super();
-	    this.setAlignment(Pos.CENTER);
-	    this.setPrefHeight(120); // Adjust height as needed
-	    this.setSpacing(20);
-		
-		BackgroundFill backgroundFill = new BackgroundFill(Color.SADDLEBROWN, null, null);
-		this.setBackground(new Background(backgroundFill));
+public class Slot extends HBox {
+
+    private PlantsCard selectedCard;
+
+    public Slot() {
+        super();
+        this.setAlignment(Pos.CENTER);
+        this.setPrefHeight(130); // Adjust to fit the card height
+        this.setSpacing(30); // Space between cards
+
+        // Set background
+        BackgroundFill backgroundFill = new BackgroundFill(Color.SADDLEBROWN, null, null);
+        this.setBackground(new Background(backgroundFill));
+
+        // Create and add cards
+        PlantsCard[] cards = {
+            new SunflowerCard(),
+            new PeaShooterCard(),
+            new WallnutCard(),
+            new CherryBombCard(),
+            new PotatoMineCard(),
+            new FrostyPeaShooterCard()
+        };
         
-	}
-	
-	
-	
+        for (PlantsCard card : cards) {
+            card.setOnMouseClicked(e -> selectedCard = card);
+        }
+        Sunny sun = new Sunny();
+        this.getChildren().add(sun);
+        this.getChildren().addAll(cards);
+        
+    }
+    public PlantsCard getSelectedCard(){
+        return this.selectedCard;
+    }
 
 }

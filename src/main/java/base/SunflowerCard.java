@@ -3,10 +3,10 @@ package base;
 import gui.PlantsCard;
 import javafx.scene.image.Image;
 
-public class PeaShooterCard extends PlantsCard {
-    public PeaShooterCard() {
-        super(15,100);
-        String imagePath = "peaShooterCard.jpg";
+public class SunflowerCard extends PlantsCard{
+    public SunflowerCard(){
+        super(10,50);
+        String imagePath = "SunflowerCard.jpg";
         String resourceUrl = ClassLoader.getSystemResource(imagePath).toString();
         this.setImage(new Image(resourceUrl));
         this.setFitWidth(100);
