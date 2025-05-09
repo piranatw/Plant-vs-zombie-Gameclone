@@ -12,8 +12,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import logic.Plantable;
+import logic.Shootable;
 
-public class FrostyPeashooter extends ImageView implements Plantable{
+public class FrostyPeashooter extends ImageView implements Plantable,Shootable{
     private Timeline shootingTimeline;
     private double positionX;
     private double positionY;
@@ -37,7 +38,7 @@ public class FrostyPeashooter extends ImageView implements Plantable{
         shootingTimeline.play();
     }
 
-    private void shootBullet() {
+    public void shootBullet() {
         // Create a new bullet
         Bullet bullet = new Bullet("frost",5);
         ColorInput cyanOverlay = new ColorInput(0, 0, 25, 25, Color.CYAN);
@@ -55,7 +56,7 @@ public class FrostyPeashooter extends ImageView implements Plantable{
 
         // Add the bullet to the bullet pane and start its movement
         bulletPane.getChildren().add(bullet);
-        bullet.move();
+        bullet.move(this);
     }
     public void takeDamage(int damage){
         this.health = this.health - damage;

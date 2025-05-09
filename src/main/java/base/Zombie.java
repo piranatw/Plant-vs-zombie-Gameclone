@@ -8,6 +8,7 @@ public abstract class Zombie extends Characters implements Cloneable {
     protected TranslateTransition transition;
 
     public Zombie(double speed, int health) {
+        
         this.speed = speed;
         this.health = health;
         this.setFitWidth(100);  // ImageView uses fitWidth/fitHeight

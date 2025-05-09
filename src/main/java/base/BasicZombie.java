@@ -11,13 +11,15 @@ import javafx.util.Duration;
 import logic.Plantable;
 
 public class BasicZombie extends Zombie {
-    private double VELOCITY = -2; // Pixels per frame
+    private double VELOCITY = -1; // Pixels per frame
     private boolean isAlive = true, froze = false;
     private Timeline movementTimeline;
     private Timeline attackTimeline;
 
     public BasicZombie() {
         super(30, 100); // duration in seconds, initial health
+        this.setPickOnBounds(false);
+        this.setMouseTransparent(true);
         String imagePath = "zombie_normal.gif";
         String resourceUrl = ClassLoader.getSystemResource(imagePath).toString();
         this.setImage(new Image(resourceUrl));
@@ -30,7 +32,7 @@ public class BasicZombie extends Zombie {
     private void startMoving() {
         movementTimeline = new Timeline(new KeyFrame(Duration.millis(33), e -> {
             if (isAlive) {
-                setLayoutX(getLayoutX() + VELOCITY);
+                setLayoutX((double)(getLayoutX()) + (double)this.VELOCITY);
             }
         }));
         movementTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -51,7 +53,7 @@ public class BasicZombie extends Zombie {
         attackTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             plant.takeDamage(10);
             if (plant.isDied()) {
-                this.VELOCITY = -2;
+                this.VELOCITY = -1;
                 this.setImage(new Image(ClassLoader.getSystemResource("zombie-normal.gif").toString()));
                 this.setFitWidth(80);
                 this.setFitHeight(80);
@@ -68,7 +70,7 @@ public class BasicZombie extends Zombie {
         Blend blend = new Blend();
         blend.setMode(BlendMode.MULTIPLY); // Try ADD, SCREEN, or MULTIPLY for different effects
         blend.setTopInput(cyanOverlay);
-        this.VELOCITY = -1;
+        this.VELOCITY = -0.25;
         this.setEffect(blend);
     }
 

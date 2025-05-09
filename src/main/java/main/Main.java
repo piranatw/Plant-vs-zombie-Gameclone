@@ -2,6 +2,7 @@ package main;
 
 import base.BasicZombie;
 import base.Sun;
+import base.Sunny;
 import gui.PvzPane;
 import gui.PvzSquare;
 import gui.Slot;
@@ -11,8 +12,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -70,9 +77,10 @@ public class Main extends Application {
     }
 
     private void startGameLoop() {
+        addDebugButtons();
         int zombiesPerWave = wave * 10;
         Timeline sunSpawner = new Timeline();
-        KeyFrame sunFrame = new KeyFrame(Duration.seconds(5),e ->{
+        KeyFrame sunFrame = new KeyFrame(Duration.seconds(5), e -> {
             spawnSun();
         });
         sunSpawner.getKeyFrames().add(sunFrame);
@@ -87,16 +95,20 @@ public class Main extends Application {
         wave = wave + 1;
         zombieSpawner.play();
     }
-    
-    private void spawnSun(){
-        Platform.runLater(() ->{
+
+    private void spawnSun() {
+        Platform.runLater(() -> {
             double x = Math.random() * (pvzPane.getWidth() - 100);
-            double y = -100;
-            Sun sun = new Sun(pvzPane.getSunLayer());
-            pvzPane.getSunLayer().getChildren().add(sun);
-            sun.move(x,y,"normal");
+            double y = -200;
+            Sun sun = new Sun(pvzPane);
+            sun.setManaged(false);
+            sun.setLayoutX(x);
+            sun.setLayoutY(y);
+            pvzPane.getChildren().add(sun);
+            sun.move(x, y, "normal");
         });
     }
+
     private void spawnZombie() {
         new Thread(() -> {
             try {
@@ -112,7 +124,8 @@ public class Main extends Application {
                 int row = (int) (Math.random() * 5);
 
                 // Add zombie to the right side of the grid (column 8)
-                // Position zombie at the right edge of the grid in the appropriate row // Assuming each column is ~100px wide (8 * 100)
+                // Position zombie at the right edge of the grid in the appropriate row //
+                // Assuming each column is ~100px wide (8 * 100)
                 PvzSquare targetTile = pvzPane.getAllTiles().get(row); // First column of the row
                 double tileY = targetTile.getLayoutY();
                 zombie.setLayoutY(tileY - (zombie.getFitHeight() - targetTile.getHeight()) / 2); // vertically center
@@ -129,6 +142,37 @@ public class Main extends Application {
         if (collisionManager != null) {
             collisionManager.stop();
         }
+    }
+
+    private void addDebugButtons() {
+        // Create a simple debug panel
+        HBox debugPanel = new HBox(10);
+        debugPanel.setPadding(new Insets(5));
+        debugPanel.setBackground(new Background(new BackgroundFill(
+                Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        // Button to force select first card
+        Button forceSelectBtn = new Button("Force Select First Card");
+        forceSelectBtn.setOnAction(e -> slot.forceSelectFirstCard());
+
+        // Button to print game state
+        Button printStateBtn = new Button("Print Game State");
+        printStateBtn.setOnAction(e -> {
+            System.out.println("=== GAME STATE ===");
+            System.out.println("Selected card: " +
+                    (slot.getSelectedCard() == null ? "NONE" : slot.getSelectedCard().getClass().getSimpleName()));
+            System.out.println("Sun amount: " + Sunny.getSunAmount());
+            System.out.println("==================");
+        });
+
+        // Add buttons to panel
+        debugPanel.getChildren().addAll(forceSelectBtn, printStateBtn);
+
+        // Add panel to your game scene
+        // mainLayout.getChildren().add(debugPanel); // Add to your main layout
+
+        // Or if using BorderPane:
+        // borderPane.setBottom(debugPanel);
     }
 
     public static void main(String[] args) {

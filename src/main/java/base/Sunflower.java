@@ -1,5 +1,6 @@
 package base;
 
+import gui.PvzPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -13,12 +14,13 @@ public class Sunflower extends ImageView implements Plantable{
     private Timeline sundropTimeline;
     private double positionX;
     private double positionY;
-    private Pane bulletPane ,sunLayer;
+    private Pane bulletPane ;
+    private PvzPane sunPane;
     private int health = 60;
-    public Sunflower(Pane bulletPane, Pane sunLayer,double x, double y) {
+    public Sunflower(Pane bulletPane,PvzPane sunPane,double x, double y) {
         // Store the bullet pane and position
-        this.sunLayer = sunLayer;
         this.bulletPane = bulletPane;
+        this.sunPane = sunPane;
         this.positionX = x;
         this.positionY = y;
         this.setLayoutX(x);
@@ -29,19 +31,21 @@ public class Sunflower extends ImageView implements Plantable{
         this.setFitHeight(80);
 
         // Set up the shooting timeline to fire bullets at intervals
-        sundropTimeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> dropSun()));
+        sundropTimeline = new Timeline(new KeyFrame(Duration.seconds(3), e -> dropSun()));
         sundropTimeline.setCycleCount(Timeline.INDEFINITE);
         sundropTimeline.play();
     }
 
     private void dropSun() {
-        Sun sun = new Sun(this.sunLayer);
+        Sun sun = new Sun(this.sunPane);
+        sun.setManaged(false);
         System.out.println("sun drop");
-        // sun.setLayoutX(positionX);
-        // sun.setLayoutY(positionY + 30);
-        System.out.println(positionX + "...." + positionY);
-        sun.move(positionX,30 + positionY,"sun");
-        Platform.runLater(() -> sunLayer.getChildren().add(sun));
+        sun.setLayoutX(positionX + 10);
+        sun.setLayoutY(positionY);
+        // System.out.println(positionX + "...." + positionY);
+        System.out.println("Sun drop from" + positionX + "and" + positionY);
+        this.sunPane.getChildren().add(sun);
+        sun.move(positionX + 10,positionY ,"sun");
     }
     public void takeDamage(int damage){
         this.health = this.health - damage;

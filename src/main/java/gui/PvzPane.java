@@ -2,6 +2,7 @@ package gui;
 
 import java.util.ArrayList;
 
+import Card.PlantsCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
@@ -21,11 +22,16 @@ public class PvzPane extends StackPane {
     private GridPane gridPane;
     private Pane bulletLayer;
     private Pane zombieLayer;
-    private Pane sunLayer;
     private Pane plantLayer;
+    
+    // IMPORTANT FIX: Store a reference to the slot
+    private Slot slot;
     
     public PvzPane(Slot slot) {
         this.allTiles = new ArrayList<>();
+        
+        // IMPORTANT FIX: Store the slot reference
+        this.slot = slot;
         
         // Create the main layout
         this.setPadding(new Insets(15));
@@ -43,9 +49,6 @@ public class PvzPane extends StackPane {
         bulletLayer.setPickOnBounds(false); // Makes the pane transparent to mouse events
         bulletLayer.setBackground(Background.EMPTY);
         // Create Sun Layer
-        sunLayer = new Pane();
-        sunLayer.setPickOnBounds(false);
-        sunLayer.setBackground(Background.EMPTY);
 
         // Create zombie layer
         zombieLayer = new Pane();
@@ -57,23 +60,44 @@ public class PvzPane extends StackPane {
         plantLayer.setBackground(Background.EMPTY);
         // Add layers to stack pane - order matters for z-index
         // Bottom to top: gridPane, bulletLayer, zombieLayer
-        this.getChildren().addAll(gridPane, bulletLayer, zombieLayer, plantLayer, sunLayer);
+        this.getChildren().addAll(gridPane, bulletLayer, zombieLayer, plantLayer);
         
         // Create tiles and add to grid
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
                 PvzSquare tile = new PvzSquare(i, j);
-                tile.setOnMouseClicked(e -> tile.plantIfPossible(slot));
+                
+                // IMPORTANT FIX: Pass the current slot to the tile and store reference
+                tile.setSlot(slot);
+                
+                tile.setOnMouseClicked(e -> {
+                    // DEBUG: When a tile is clicked, verify the slot and selected card
+                    System.out.println("Tile clicked at position (" + tile.getxPosition() + "," + tile.getyPosition() + ")");
+                    PlantsCard selectedCard = slot.getSelectedCard();
+                    if (selectedCard != null) {
+                        System.out.println("Selected card confirmed: " + selectedCard.getClass().getSimpleName());
+                    }
+                    
+                    tile.plantIfPossible(slot);
+                });
+                
                 this.allTiles.add(tile);
                 gridPane.add(tile, i, j);
             }
         }
         
+        // IMPORTANT FIX: Add debug message to confirm initialization
+        System.out.println("PvzPane initialized with " + allTiles.size() + " tiles");
+        
+        // IMPORTANT FIX: Force select the first card for testing if needed
+        // Uncomment this line if you want to automatically select the first card
+        // slot.forceSelectFirstCard();
+        
         // IMPORTANT: Set the bullet layer reference in PvzSquare
         // Must be done after initialization
         PvzSquare.setBulletLayer(bulletLayer);
+        PvzSquare.setPvzPane(this);
         PvzSquare.setPlantLayer(plantLayer);
-        PvzSquare.setSunLayer(sunLayer);
         
         // Ensure the layers are positioned correctly
         layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
@@ -84,19 +108,18 @@ public class PvzPane extends StackPane {
             zombieLayer.setLayoutY(gridPane.getLayoutY());
             plantLayer.setLayoutX(gridPane.getLayoutX());
             plantLayer.setLayoutY(gridPane.getLayoutY());
-            sunLayer.setLayoutX(gridPane.getLayoutX());
-            sunLayer.setLayoutY(gridPane.getLayoutY());
         });
     }
+    
     public ArrayList<PvzSquare> getAllTiles() {
         return this.allTiles;
     }
+    
     public Pane getPlantLayer(){
         return plantLayer;
     }
-    public Pane getSunLayer(){
-        return sunLayer;
-    }
+    
+    
     public Pane getBulletLayer() {
         return bulletLayer;
     }

@@ -1,18 +1,19 @@
 package gui;
 
-import base.CherryBombCard;
+import Card.CherryBombCard;
+import Card.FrostyPeaShooterCard;
+import Card.PeaShooterCard;
+import Card.PlantsCard;
+import Card.PotatoMineCard;
+import Card.SunflowerCard;
+import Card.WallnutCard;
 import base.Cherrybomb;
-import base.FrostyPeaShooterCard;
 import base.FrostyPeashooter;
-import base.PeaShooterCard;
 import base.Peashooter;
-import base.PotatoMineCard;
 import base.Potatomine;
 import base.Sunflower;
-import base.SunflowerCard;
 import base.Sunny;
 import base.Wallnut;
-import base.WallnutCard;
 import javafx.animation.PauseTransition;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -39,8 +40,11 @@ public class PvzSquare extends Pane {
     private Sunflower sunflower;
     // Reference to the main game pane (will be set by PvzPane)
     private static Pane bulletLayer;
-    private static Pane sunLayer;
+    private static PvzPane pvzPane;
     private static Pane plantLayer;
+    
+    // IMPORTANT FIX: Keep a reference to the slot for reliable access
+    private Slot currentSlot;
 
     public PvzSquare(int xPosition, int yPosition) {
         super();
@@ -60,13 +64,26 @@ public class PvzSquare extends Pane {
                 new BorderWidths(1));
         this.setBorder(new Border(borderStroke));
     }
+    
+    // IMPORTANT FIX: New method to set the slot reference
+    public void setSlot(Slot slot) {
+        this.currentSlot = slot;
+    }
 
     public void plantIfPossible(Slot slot) {
+        // Use the provided slot parameter, but fall back to the instance variable if needed
+        Slot slotToUse = (slot != null) ? slot : currentSlot;
+        
+        if (slotToUse == null) {
+            System.out.println("ERROR: No slot available to plant from!");
+            return;
+        }
+        
         // Debug output to trace execution
         System.out.println("Attempting to plant. Current state: isPlanted=" + isPlanted);
         
         // Get the selected card
-        PlantsCard card = slot.getSelectedCard();
+        PlantsCard card = slotToUse.getSelectedCard();
         
         // Validation checks with detailed logging
         if (card == null) {
@@ -122,7 +139,7 @@ public class PvzSquare extends Pane {
             potatomine = new Potatomine(bulletLayer, bulletLayerX, bulletLayerY);
             plantLayer.getChildren().add(potatomine);
         } else if (card instanceof SunflowerCard) {
-            sunflower = new Sunflower(bulletLayer, sunLayer, bulletLayerX, bulletLayerY);
+            sunflower = new Sunflower(bulletLayer, pvzPane,bulletLayerX, bulletLayerY);
             plantLayer.getChildren().add(sunflower);
         }
         
@@ -131,7 +148,7 @@ public class PvzSquare extends Pane {
         this.setBackground(new Background(backgroundFill));
     
         // Clear selection
-        slot.clearSelectedCard();
+        slotToUse.clearSelectedCard();
     
         // Start cooldown
         card.startCooldown();
@@ -155,9 +172,8 @@ public class PvzSquare extends Pane {
     public static void setBulletLayer(Pane layer) {
         bulletLayer = layer;
     }
-
-    public static void setSunLayer(Pane layer) {
-        sunLayer = layer;
+    public static void setPvzPane(PvzPane layer){
+        pvzPane = layer;
     }
 
     public boolean isPlanted() {

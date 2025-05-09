@@ -8,8 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import logic.Plantable;
+import logic.Shootable;
 
-public class Peashooter extends ImageView implements Plantable{
+public class Peashooter extends ImageView implements Plantable,Shootable{
     private Timeline shootingTimeline;
     private double positionX;
     private double positionY;
@@ -33,7 +34,7 @@ public class Peashooter extends ImageView implements Plantable{
         shootingTimeline.play();
     }
 
-    private void shootBullet() {
+    public void shootBullet() {
         // Create a new bullet
         Bullet bullet = new Bullet("normal",10);
         
@@ -46,7 +47,7 @@ public class Peashooter extends ImageView implements Plantable{
         
         // Add the bullet to the bullet pane and start its movement
         bulletPane.getChildren().add(bullet);
-        bullet.move();
+        bullet.move(this);
     }
     public void takeDamage(int damage){
         this.health = this.health - damage;

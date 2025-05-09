@@ -1,6 +1,5 @@
-package base;
+package Card;
 
-import gui.PlantsCard;
 import javafx.scene.image.Image;
 
 public class SunflowerCard extends PlantsCard{

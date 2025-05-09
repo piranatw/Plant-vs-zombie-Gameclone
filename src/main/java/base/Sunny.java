@@ -16,6 +16,7 @@ public class Sunny extends VBox{
     	this.setPrefHeight(100);
     	this.setPrefWidth(100);
     	// sunImage
+        this.setPickOnBounds(false);
         String imagePath = "sun.png";
         String resourceURL = ClassLoader.getSystemResource(imagePath).toString();
         ImageView sunImage = new ImageView(new Image(resourceURL));

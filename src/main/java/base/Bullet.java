@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import logic.Plantable;
 
 public class Bullet extends ImageView {
     private int damage;
@@ -19,10 +20,11 @@ public class Bullet extends ImageView {
         this.setViewOrder(-1); // Appear above other elements
     }
 
-    public void move() {
+    public void move(Plantable plant) {
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                if(plant.isDied())    timer.stop();
                 setLayoutX(getLayoutX() + SPEED);
 
                 // Remove if off-screen
