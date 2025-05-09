@@ -37,7 +37,11 @@ public class Slot extends HBox {
         };
         
         for (PlantsCard card : cards) {
-            card.setOnMouseClicked(e -> selectedCard = card);
+            card.setOnMouseClicked(e ->{ 
+                System.out.println("Hello");
+                selectedCard = card;
+                e.consume();
+            });
         }
         Sunny sun = new Sunny();
         this.getChildren().add(sun);
@@ -47,5 +51,7 @@ public class Slot extends HBox {
     public PlantsCard getSelectedCard(){
         return this.selectedCard;
     }
-
+    public void clearSelectedCard(){
+        this.selectedCard = null;
+    }
 }

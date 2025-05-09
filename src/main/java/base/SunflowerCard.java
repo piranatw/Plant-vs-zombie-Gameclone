@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 
 public class SunflowerCard extends PlantsCard{
     public SunflowerCard(){
-        super(10,50);
+        super(5,50);
         String imagePath = "SunflowerCard.jpg";
         String resourceUrl = ClassLoader.getSystemResource(imagePath).toString();
         this.setImage(new Image(resourceUrl));

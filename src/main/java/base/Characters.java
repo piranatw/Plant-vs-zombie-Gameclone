@@ -7,7 +7,4 @@ public class Characters extends ImageView{
     public void attack(){
         System.out.println("Attack");
     }
-    public void die(){
-        System.out.println("die");
-    }
 }

@@ -1,7 +1,6 @@
 package base;
 
 import javafx.animation.TranslateTransition;
-import javafx.util.Duration;
 
 public abstract class Zombie extends Characters implements Cloneable {
     protected double speed;
@@ -24,16 +23,10 @@ public abstract class Zombie extends Characters implements Cloneable {
             return null;
         }
     }
-
-    public  void move() {
-        //TranslateTransition this = new TranslateTransition();
-        this.transition = new TranslateTransition();
-        this.transition.setDuration(Duration.seconds(speed));
-        this.transition.setNode(this);
-        this.transition.setFromX(900);
-        this.transition.setToX(-900);
-        this.transition.setCycleCount(1);
-        this.transition.play();
-        System.out.println("Moving");
+    public int getHealth(){
+        return this.health;
+    }
+    public void setHealth(int health){
+        this.health = health;
     }
 }

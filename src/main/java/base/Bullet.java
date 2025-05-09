@@ -1,0 +1,54 @@
+package base;
+
+import javafx.animation.AnimationTimer;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+
+public class Bullet extends ImageView {
+    private int damage;
+    private static final double SPEED = 5; // pixels per frame
+    private AnimationTimer timer;
+    private String name;
+    public Bullet(String name,int damage) {
+        this.name = name;
+        this.damage = damage;
+        this.setImage(new Image(ClassLoader.getSystemResource("bullet.png").toString()));
+        this.setFitWidth(25);
+        this.setFitHeight(25);
+        this.setViewOrder(-1); // Appear above other elements
+    }
+
+    public void move() {
+        timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                setLayoutX(getLayoutX() + SPEED);
+
+                // Remove if off-screen
+                if (getLayoutX() > 950) {
+                    stop();
+                    if (getParent() != null) {
+                        ((Pane) getParent()).getChildren().remove(Bullet.this);
+                    }
+                }
+            }
+        };
+        timer.start();
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+    public void setDamage(int damage){
+        this.damage = damage;
+    }
+    public String getName(){
+        return this.name;
+    }
+    public void stop() {
+        if (timer != null) {
+            timer.stop();
+        }
+    }
+}

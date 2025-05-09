@@ -12,4 +12,5 @@ public class CherryBombCard extends PlantsCard{
         this.setFitWidth(100);
         this.setFitHeight(90);
     }
+    
 }
