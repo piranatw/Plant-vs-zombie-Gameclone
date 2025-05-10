@@ -16,6 +16,7 @@ public class MainMenu {
 
     public MainMenu(Stage primaryStage) {
         MainMenu.primaryStage = primaryStage;
+
     }
 
     public static VBox createMenu() {
@@ -37,9 +38,12 @@ public class MainMenu {
 
         Button quitButton = new Button("Quit");
         quitButton.setFont(Font.font("Comic Sans MS", 24));
-        quitButton.setStyle("-fx-background-color: #ff4c4c; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;");
-        quitButton.setOnMouseEntered(e -> quitButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;"));
-        quitButton.setOnMouseExited(e -> quitButton.setStyle("-fx-background-color: #ff4c4c; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;"));
+        quitButton.setStyle(
+                "-fx-background-color: #ff4c4c; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;");
+        quitButton.setOnMouseEntered(e -> quitButton.setStyle(
+                "-fx-background-color: #ff0000; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;"));
+        quitButton.setOnMouseExited(e -> quitButton.setStyle(
+                "-fx-background-color: #ff4c4c; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;"));
         quitButton.setOnAction(e -> Platform.exit());
 
         menuLayout.getChildren().addAll(title, easyButton, normalButton, hardButton, quitButton);
@@ -50,9 +54,12 @@ public class MainMenu {
     private static Button createStyledButton(String label, int wave, int zombies, String baseColor, String hoverColor) {
         Button button = new Button(label);
         button.setFont(Font.font("Comic Sans MS", 24));
-        button.setStyle("-fx-background-color: " + baseColor + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;");
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + hoverColor + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + baseColor + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;"));
+        button.setStyle("-fx-background-color: " + baseColor
+                + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;");
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + hoverColor
+                + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + baseColor
+                + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;"));
         button.setOnAction(e -> {
             GameLogic.setWave(wave);
             GameLogic.setAllZombies(zombies);
@@ -67,7 +74,19 @@ public class MainMenu {
         VBox gameRoot = gameLogic.initializeGame();
         Scene gameScene = new Scene(gameRoot, 950, 750);
         primaryStage.setScene(gameScene);
+
         primaryStage.setTitle("Plants Vs Zombies");
+        gameScene.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case F11:
+                    primaryStage.setFullScreen(!primaryStage.isFullScreen());
+                    break;
+                default:
+                    break;
+            }
+        });
+        primaryStage.setFullScreenExitHint(""); // empty string disables it
+
         GameLogic.startGame();
     }
 }
