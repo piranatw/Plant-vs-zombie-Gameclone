@@ -54,7 +54,7 @@ public class Peashooter extends ImageView implements Plantable, Shootable {
         bullet.move(this);
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage (int damage) {
         this.health = this.health - damage;
         if (health <= 0) {
             Platform.runLater(() -> {

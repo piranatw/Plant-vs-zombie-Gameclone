@@ -16,6 +16,7 @@ public class Sunflower extends ImageView implements Plantable{
     private double positionX;
     private double positionY;
     private Pane bulletPane ;
+    private Sun sun;
     private PvzPane sunPane;
     private int health = 60;
     private PvzSquare pvzSquare;
@@ -40,7 +41,7 @@ public class Sunflower extends ImageView implements Plantable{
     }
 
     private void dropSun() {
-        Sun sun = new Sun(this.sunPane);
+        sun = new Sun(this.sunPane);
         sun.setManaged(false);
         System.out.println("sun drop");
         sun.setLayoutX(positionX + 10);
@@ -58,6 +59,7 @@ public class Sunflower extends ImageView implements Plantable{
             if (parent != null) {
                 parent.getChildren().remove(this); // 💥 Remove plant from scene
             }
+            sundropTimeline.stop();
         });
         this.pvzSquare.setPlanted(false);
     }

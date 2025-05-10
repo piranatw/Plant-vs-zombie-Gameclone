@@ -30,7 +30,7 @@ public class Sun extends ImageView {
 
     public void move(double x, double y, String name) {
         int fallDistance = 100;
-        int fallDuration = 5;
+        int fallDuration = 10;
 
         if ("normal".equals(name)) {
             fallDistance = 1000;
@@ -44,6 +44,9 @@ public class Sun extends ImageView {
         this.transition.play();
 
         System.out.println("Sun falling from " + getLayoutX() + ", " + getLayoutY());
+    }
+    public void deleteSun(){
+        sunPane.getChildren().remove(this);
     }
 
 }

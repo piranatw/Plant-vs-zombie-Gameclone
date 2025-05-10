@@ -11,7 +11,7 @@ import javafx.util.Duration;
 import logic.Plantable;
 
 public class BasicZombie extends Zombie {
-    private double VELOCITY = -1; // Pixels per frame
+    private double velocity = -1; // Pixels per frame
     private boolean isAlive = true, froze = false;
     private Timeline movementTimeline;
     private Timeline attackTimeline;
@@ -32,7 +32,7 @@ public class BasicZombie extends Zombie {
     private void startMoving() {
         movementTimeline = new Timeline(new KeyFrame(Duration.millis(33), e -> {
             if (isAlive) {
-                setLayoutX((double)(getLayoutX()) + (double)this.VELOCITY);
+                setLayoutX((double)(getLayoutX()) + (double)this.velocity);
             }
         }));
         movementTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -47,17 +47,22 @@ public class BasicZombie extends Zombie {
     }
 
     public void startAttacking(Plantable plant) {
-        this.VELOCITY = 0;
+        this.velocity = 0;
+        
         if (attackTimeline != null)
             return;
+            
         attackTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             plant.takeDamage(10);
             if (plant.isDied()) {
-                this.VELOCITY = -1;
+                System.out.println("Plant is died");
+                if(froze)   this.velocity = -0.25;
+                else this.velocity = -1.00;
                 // this.setImage(new Image(ClassLoader.getSystemResource("zombie-normal.gif").toString()));
                 this.setFitWidth(80);
                 this.setFitHeight(80);
                 attackTimeline.stop();
+                attackTimeline = null;
             }
         }));
         attackTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -70,7 +75,7 @@ public class BasicZombie extends Zombie {
         Blend blend = new Blend();
         blend.setMode(BlendMode.MULTIPLY); // Try ADD, SCREEN, or MULTIPLY for different effects
         blend.setTopInput(cyanOverlay);
-        this.VELOCITY = -0.25;
+        this.velocity = -0.25;
         this.setEffect(blend);
     }
 
