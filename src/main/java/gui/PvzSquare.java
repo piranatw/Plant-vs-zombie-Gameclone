@@ -124,28 +124,28 @@ public class PvzSquare extends Pane {
         
         // Add correct plant
         if (card instanceof PeaShooterCard) {
-            peashooter = new Peashooter(bulletLayer, bulletLayerX, bulletLayerY);
+            peashooter = new Peashooter(bulletLayer, bulletLayerX, bulletLayerY,this);
             plantLayer.getChildren().add(peashooter);
         } else if (card instanceof FrostyPeaShooterCard) {
-            frostyshooter = new FrostyPeashooter(bulletLayer, bulletLayerX, bulletLayerY);
+            frostyshooter = new FrostyPeashooter(bulletLayer, bulletLayerX, bulletLayerY,this);
             plantLayer.getChildren().add(frostyshooter);
         } else if (card instanceof WallnutCard) {
-            wallnut = new Wallnut(bulletLayer, bulletLayerX, bulletLayerY);
+            wallnut = new Wallnut(bulletLayer, bulletLayerX, bulletLayerY,this);
             plantLayer.getChildren().add(wallnut);
         } else if (card instanceof CherryBombCard) {
-            cherry = new Cherrybomb(bulletLayer, bulletLayerX, bulletLayerY);
+            cherry = new Cherrybomb(bulletLayer, bulletLayerX, bulletLayerY,this);
             plantLayer.getChildren().add(cherry);
         } else if (card instanceof PotatoMineCard) {
-            potatomine = new Potatomine(bulletLayer, bulletLayerX, bulletLayerY);
+            potatomine = new Potatomine(bulletLayer, bulletLayerX, bulletLayerY,this);
             plantLayer.getChildren().add(potatomine);
         } else if (card instanceof SunflowerCard) {
-            sunflower = new Sunflower(bulletLayer, pvzPane,bulletLayerX, bulletLayerY);
+            sunflower = new Sunflower(bulletLayer, pvzPane,bulletLayerX, bulletLayerY,this);
             plantLayer.getChildren().add(sunflower);
         }
         
         // Visual indication that the square is planted
-        BackgroundFill backgroundFill = new BackgroundFill(Color.web("#A8C66C"), null, null);
-        this.setBackground(new Background(backgroundFill));
+        // BackgroundFill backgroundFill = new BackgroundFill(Color.web("#A8C66C"), null, null);
+        // this.setBackground(new Background(backgroundFill));
     
         // Clear selection
         slotToUse.clearSelectedCard();

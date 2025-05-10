@@ -60,7 +60,7 @@ public class CollisionManager {
                 Plantable plant = (Plantable) plantNode;
                 Bounds plantBounds = ((Node) plant).getBoundsInParent();
                 // System.out.println(plantBounds); // Check if the plant has non-zero bounds
-                // System.out.println("Checking zombie at " + zombieBounds + " against plant at " + plantBounds);
+                //System.out.println("Checking zombie at " + zombieBounds + " against plant at " + plantBounds);
 
                 if (boundsIntersect(zombieBounds, plantBounds)) {
                     handleZombiePlantCollision(plant, zombie);

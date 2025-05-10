@@ -1,5 +1,6 @@
 package base;
 
+import gui.PvzSquare;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -13,9 +14,11 @@ public class Cherrybomb extends ImageView implements Plantable {
     private double positionY;
     private Pane bulletPane;
     private int health = 100000;
+    private PvzSquare pvzSquare;
 
-    public Cherrybomb(Pane bulletPane, double x, double y) {
+    public Cherrybomb(Pane bulletPane, double x, double y, PvzSquare pvzSquare) {
         // Store the bullet pane and position
+        this.pvzSquare = pvzSquare;
         this.bulletPane = bulletPane;
         this.positionX = x;
         this.positionY = y;
@@ -29,7 +32,7 @@ public class Cherrybomb extends ImageView implements Plantable {
 
     private void explosion() {
         // Create a new bullet
-        
+
         this.health = 0;
         this.setImage(new Image(ClassLoader.getSystemResource("bomb.gif").toString()));
         this.setFitHeight(200);
@@ -41,6 +44,7 @@ public class Cherrybomb extends ImageView implements Plantable {
                     parent.getChildren().remove(this); // 💥 Remove plant from scene
                 }
             });
+            this.pvzSquare.setPlanted(false);
         }
     }
 

@@ -54,7 +54,7 @@ public class BasicZombie extends Zombie {
             plant.takeDamage(10);
             if (plant.isDied()) {
                 this.VELOCITY = -1;
-                this.setImage(new Image(ClassLoader.getSystemResource("zombie-normal.gif").toString()));
+                // this.setImage(new Image(ClassLoader.getSystemResource("zombie-normal.gif").toString()));
                 this.setFitWidth(80);
                 this.setFitHeight(80);
                 attackTimeline.stop();

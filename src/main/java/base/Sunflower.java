@@ -1,6 +1,7 @@
 package base;
 
 import gui.PvzPane;
+import gui.PvzSquare;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -17,8 +18,10 @@ public class Sunflower extends ImageView implements Plantable{
     private Pane bulletPane ;
     private PvzPane sunPane;
     private int health = 60;
-    public Sunflower(Pane bulletPane,PvzPane sunPane,double x, double y) {
+    private PvzSquare pvzSquare;
+    public Sunflower(Pane bulletPane,PvzPane sunPane,double x, double y,PvzSquare pvzSquare) {
         // Store the bullet pane and position
+        this.pvzSquare = pvzSquare;
         this.bulletPane = bulletPane;
         this.sunPane = sunPane;
         this.positionX = x;
@@ -56,6 +59,7 @@ public class Sunflower extends ImageView implements Plantable{
                 parent.getChildren().remove(this); // 💥 Remove plant from scene
             }
         });
+        this.pvzSquare.setPlanted(false);
     }
     }
     public boolean isDied(){

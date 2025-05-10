@@ -1,5 +1,6 @@
 package base;
 
+import gui.PvzSquare;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -20,8 +21,10 @@ public class FrostyPeashooter extends ImageView implements Plantable,Shootable{
     private double positionY;
     private Pane bulletPane;
     private int health = 60;
-    public FrostyPeashooter(Pane bulletPane, double x, double y) {
+    private PvzSquare pvzSquare;
+    public FrostyPeashooter(Pane bulletPane, double x, double y,PvzSquare pvzSquare) {
         // Store the bullet pane and position
+        this.pvzSquare = pvzSquare;
         this.bulletPane = bulletPane;
         this.positionX = x;
         this.positionY = y;
@@ -67,6 +70,7 @@ public class FrostyPeashooter extends ImageView implements Plantable,Shootable{
                 parent.getChildren().remove(this); // 💥 Remove plant from scene
             }
         });
+        this.pvzSquare.setPlanted(false);
     }
     }
     public boolean isDied(){

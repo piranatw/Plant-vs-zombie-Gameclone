@@ -1,5 +1,6 @@
 package base;
 
+import gui.PvzSquare;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -13,9 +14,10 @@ public class Wallnut extends ImageView implements Plantable {
     private double positionY;
     private Pane bulletPane;
     private int health = 200;
-
-    public Wallnut(Pane bulletPane, double x, double y) {
+    private PvzSquare pvzSquare;
+    public Wallnut(Pane bulletPane, double x, double y,PvzSquare pvzSquare) {
         // Store the bullet pane and position
+        this.pvzSquare = pvzSquare;
         this.bulletPane = bulletPane;
         this.positionX = x;
         this.positionY = y;
@@ -36,6 +38,7 @@ public class Wallnut extends ImageView implements Plantable {
                     parent.getChildren().remove(this); // 💥 Remove plant from scene
                 }
             });
+            this.pvzSquare.setPlanted(false);
         }
     }
 

@@ -24,7 +24,10 @@ public class Bullet extends ImageView {
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if(plant.isDied())    timer.stop();
+                if(plant.isDied()){
+                    timer.stop();
+                    ((Pane) getParent()).getChildren().remove(Bullet.this);
+                }
                 setLayoutX(getLayoutX() + SPEED);
 
                 // Remove if off-screen
