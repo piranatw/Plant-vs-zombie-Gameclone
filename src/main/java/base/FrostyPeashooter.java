@@ -4,25 +4,24 @@ import gui.PvzSquare;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import logic.Plantable;
 import logic.Shootable;
 
-public class FrostyPeashooter extends ImageView implements Plantable,Shootable{
+public class FrostyPeashooter extends ImageView implements Plantable, Shootable {
     private Timeline shootingTimeline;
     private double positionX;
     private double positionY;
     private Pane bulletPane;
     private int health = 60;
     private PvzSquare pvzSquare;
-    public FrostyPeashooter(Pane bulletPane, double x, double y,PvzSquare pvzSquare) {
+
+    public FrostyPeashooter(Pane bulletPane, double x, double y, PvzSquare pvzSquare) {
         // Store the bullet pane and position
         this.pvzSquare = pvzSquare;
         this.bulletPane = bulletPane;
@@ -43,38 +42,49 @@ public class FrostyPeashooter extends ImageView implements Plantable,Shootable{
 
     public void shootBullet() {
         // Create a new bullet
-        Bullet bullet = new Bullet("frost",5);
-        ColorInput cyanOverlay = new ColorInput(0, 0, 25, 25, Color.CYAN);
+        Bullet bullet = new Bullet("frost", 5);
 
-        Blend blend = new Blend();
-        blend.setMode(BlendMode.MULTIPLY); // Try ADD, SCREEN, or MULTIPLY for different effects
-        blend.setTopInput(cyanOverlay);
+        // Apply a cool blue tone
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setHue(0.5); // Negative hue = shift green → blue
+        colorAdjust.setSaturation(1.0); // Fully saturated for vivid color
+        colorAdjust.setBrightness(0.1); // Slightly brighter
 
-        bullet.setEffect(blend);
-        // Position the bullet at the peashooter's mouth
-        bullet.setLayoutX(positionX + 90); // Offset to position at plant's "mouth"
-        bullet.setLayoutY(positionY + 40); // Centered vertically
-        // Debugging output
-        // System.out.println("Shooting bullet at: " + bullet.getLayoutX() + ", " + bullet.getLayoutY());
+        // Optional: Add a glow effect to make it feel icy
+        Glow glow = new Glow(0.6);
+        glow.setInput(colorAdjust);
 
-        // Add the bullet to the bullet pane and start its movement
+        bullet.setEffect(glow);
+
+        bullet.setLayoutX(positionX + 90);
+        bullet.setLayoutY(positionY + 40);
         bulletPane.getChildren().add(bullet);
         bullet.move(this);
     }
-    public void takeDamage(int damage){
+
+    public void takeDamage(int damage) {
         this.health = this.health - damage;
         if (health <= 0) {
-        Platform.runLater(() -> {
-            Pane parent = (Pane) this.getParent();
-            if (parent != null) {
-                parent.getChildren().remove(this); // 💥 Remove plant from scene
-            }
-        });
-        this.pvzSquare.setPlanted(false);
+            Platform.runLater(() -> {
+                Pane parent = (Pane) this.getParent();
+                if (parent != null) {
+                    parent.getChildren().remove(this); // 💥 Remove plant from scene
+                }
+            });
+            this.pvzSquare.setPlanted(false);
+        }
     }
-    }
-    public boolean isDied(){
-        if(this.health > 0)    return false;
+
+    public boolean isDied() {
+        if (this.health > 0)
+            return false;
         return true;
     }
+
+    @Override
+    public Pane getBulletPane() {
+        // TODO Auto-generated method stub
+        return this.bulletPane;
+    }
+
 }

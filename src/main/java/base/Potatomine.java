@@ -15,7 +15,8 @@ public class Potatomine extends ImageView implements Plantable {
     private Pane bulletPane;
     private int health = 100000;
     private PvzSquare pvzSquare;
-    public Potatomine(Pane bulletPane, double x, double y,PvzSquare pvzSquare) {
+
+    public Potatomine(Pane bulletPane, double x, double y, PvzSquare pvzSquare) {
         this.pvzSquare = pvzSquare;
         // Store the bullet pane and position
         this.bulletPane = bulletPane;
@@ -31,20 +32,19 @@ public class Potatomine extends ImageView implements Plantable {
 
     private void explosion() {
         // Create a new bullet
-        
+
         this.health = 0;
         this.setImage(new Image(ClassLoader.getSystemResource("bomb.gif").toString()));
         this.setFitHeight(200);
         this.setFitHeight(200);
-        if (health <= 0) {
-            Platform.runLater(() -> {
-                Pane parent = (Pane) this.getParent();
-                if (parent != null) {
-                    parent.getChildren().remove(this); // 💥 Remove plant from scene
-                }
-            });
-            this.pvzSquare.setPlanted(false);
-        }
+        Platform.runLater(() -> {
+            Pane parent = (Pane) this.getParent();
+            if (parent != null) {
+                parent.getChildren().remove(this); // 💥 Remove plant from scene
+            }
+        });
+        this.pvzSquare.setPlanted(false);
+
     }
 
     public void takeDamage(int damage) {

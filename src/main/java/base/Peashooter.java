@@ -44,7 +44,7 @@ public class Peashooter extends ImageView implements Plantable, Shootable {
 
         // Position the bullet at the peashooter's mouth
         bullet.setLayoutX(positionX + 90); // Offset to position at plant's "mouth"
-        bullet.setLayoutY(positionY + 27); // Centered vertically
+        bullet.setLayoutY(positionY + 20); // Centered vertically
 
         // Debugging output
         // System.out.println("Shooting bullet at: " + positionX + ", " + positionY);
@@ -72,4 +72,10 @@ public class Peashooter extends ImageView implements Plantable, Shootable {
             return false;
         return true;
     }
+
+	@Override
+	public Pane getBulletPane() {
+		// TODO Auto-generated method stub
+		return this.bulletPane;
+	}
 }

@@ -28,6 +28,7 @@ public class Slot extends HBox {
         this.setPrefHeight(130); // Adjust to fit the card height
         this.setSpacing(30); // Space between cards
         this.setPadding(new Insets(10));
+        this.setStyle("-fx-background-color: #fffacd; -fx-padding: 10; -fx-border-color: #c2b280; -fx-border-width: 2;");
 
         // Set background
         BackgroundFill backgroundFill = new BackgroundFill(Color.SADDLEBROWN, null, null);

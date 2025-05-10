@@ -2,9 +2,11 @@ package base;
 
 import javafx.animation.TranslateTransition;
 import javafx.scene.Cursor;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class Sun extends ImageView {
     private TranslateTransition transition;
@@ -20,6 +22,7 @@ public class Sun extends ImageView {
         this.setImage(new Image(resourceUrl));
         this.setFitWidth(50);
         this.setFitHeight(50);
+        this.setEffect(new DropShadow(10, Color.GOLD));
         this.setOnMouseClicked(event -> {
             Sunny.collectSun();
             sunPane.getChildren().remove(this);
@@ -30,7 +33,7 @@ public class Sun extends ImageView {
 
     public void move(double x, double y, String name) {
         int fallDistance = 100;
-        int fallDuration = 10;
+        int fallDuration = 6;
 
         if ("normal".equals(name)) {
             fallDistance = 1000;
@@ -40,10 +43,11 @@ public class Sun extends ImageView {
         this.transition = new TranslateTransition(javafx.util.Duration.seconds(fallDuration), this);
         this.transition.setByY(fallDistance);
         this.transition.setCycleCount(1);
-        this.transition.setOnFinished(e -> sunPane.getChildren().remove(this)); // optional auto-remove
+        if("normal".equals(name))
+            this.transition.setOnFinished(e -> sunPane.getChildren().remove(this)); // optional auto-remove
         this.transition.play();
 
-        System.out.println("Sun falling from " + getLayoutX() + ", " + getLayoutY());
+//        System.out.println("Sun falling from " + getLayoutX() + ", " + getLayoutY());
     }
     public void deleteSun(){
         sunPane.getChildren().remove(this);

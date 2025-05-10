@@ -3,7 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
+import base.Zombie;
 import base.BasicZombie;
 import base.Bullet;
 import base.Cherrybomb;
@@ -49,9 +49,9 @@ public class CollisionManager {
 
         // Check for collisions
         for (Node zombieNode : zombieNodes) {
-            if (!(zombieNode instanceof BasicZombie))
+            if (!(zombieNode instanceof Zombie))
                 continue;
-            BasicZombie zombie = (BasicZombie) zombieNode;
+            Zombie zombie = (Zombie) zombieNode;
             Bounds zombieBounds = zombie.getBoundsInParent();
 
             for (Node plantNode : plantNodes) {
@@ -81,9 +81,9 @@ public class CollisionManager {
             for (Iterator<Node> zombieIt = zombieNodes.iterator(); zombieIt.hasNext();) {
                 Node zombieNode = zombieIt.next();
 
-                if (!(zombieNode instanceof BasicZombie))
+                if (!(zombieNode instanceof Zombie))
                     continue;
-                BasicZombie zombie = (BasicZombie) zombieNode;
+                Zombie zombie = (Zombie) zombieNode;
 
                 // Get zombie bounds relative to the parent (zombieLayer)
                 Bounds zombieBounds = zombie.getBoundsInParent();
@@ -108,7 +108,7 @@ public class CollisionManager {
         // Check if two bounds intersect
         return a.intersects(b);
     }
-    private void handleZombiePlantCollision(Plantable plant,BasicZombie zombie){
+    private void handleZombiePlantCollision(Plantable plant,Zombie zombie){
         if(plant instanceof Potatomine){
             zombie.takeDamage(30);
             plant.takeDamage(10);
@@ -127,12 +127,12 @@ public class CollisionManager {
             zombie.startAttacking(plant);
         }
     }
-    private void handleFrostCollision(Bullet bullet, BasicZombie zombie) {
+    private void handleFrostCollision(Bullet bullet, Zombie zombie) {
         zombie.takeDamage(bullet.getDamage());
         zombie.Frozen();
     }
 
-    private void handleCollision(Bullet bullet, BasicZombie zombie) {
+    private void handleCollision(Bullet bullet, Zombie zombie) {
         // Handle the collision (damage zombie, remove bullet)
         zombie.takeDamage(bullet.getDamage());
 

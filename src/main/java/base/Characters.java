@@ -7,4 +7,18 @@ public class Characters extends ImageView{
     public void attack(){
         System.out.println("Attack");
     }
+	public int getHp() {
+		return hp;
+	}
+	public int getPosX() {
+		return posX;
+	}
+	public int getPosY() {
+		return posY;
+	}
+	public int getPower() {
+		return power;
+	}
+    
+    
 }

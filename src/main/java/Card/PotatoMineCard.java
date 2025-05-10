@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 
 public class PotatoMineCard extends PlantsCard{
     public PotatoMineCard(){
-        super(15,25);
+        super(12,25);
         String imagePath = "potatoMine.jpg";
         String resourceURL = ClassLoader.getSystemResource(imagePath).toString();
         this.setImage(new Image(resourceURL));

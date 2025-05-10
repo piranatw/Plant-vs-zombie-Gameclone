@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import logic.Plantable;
+import logic.Shootable;
 
 public class Bullet extends ImageView {
     private int damage;
@@ -20,14 +21,17 @@ public class Bullet extends ImageView {
         this.setViewOrder(-1); // Appear above other elements
     }
 
-    public void move(Plantable plant) {
+    public void move(Shootable plant) {
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if(plant.isDied()){
-                    timer.stop();
-                    ((Pane) getParent()).getChildren().remove(Bullet.this);
-                }
+            	if (plant instanceof Plantable) {
+	                if(((Plantable) plant).isDied()){
+	                    timer.stop();
+	                    plant.getBulletPane().getChildren().remove(Bullet.this);
+	
+	                }
+            	}
                 setLayoutX(getLayoutX() + SPEED);
 
                 // Remove if off-screen

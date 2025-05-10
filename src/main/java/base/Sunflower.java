@@ -35,7 +35,7 @@ public class Sunflower extends ImageView implements Plantable{
         this.setFitHeight(80);
 
         // Set up the shooting timeline to fire bullets at intervals
-        sundropTimeline = new Timeline(new KeyFrame(Duration.seconds(3), e -> dropSun()));
+        sundropTimeline = new Timeline(new KeyFrame(Duration.seconds(7), e -> dropSun()));
         sundropTimeline.setCycleCount(Timeline.INDEFINITE);
         sundropTimeline.play();
     }

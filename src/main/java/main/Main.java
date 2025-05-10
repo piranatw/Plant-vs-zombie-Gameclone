@@ -5,15 +5,25 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	private static Stage stage;
 
     @Override
     public void start(Stage primaryStage) {
+    	stage = primaryStage;
         MainMenu mainMenu = new MainMenu(primaryStage);
-        Scene menuScene = new Scene(mainMenu.createMenu());
+        Scene menuScene = new Scene(MainMenu.createMenu());
         primaryStage.setScene(menuScene);
         primaryStage.setTitle("Plant VS Zombie - Main Menu");
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+    
+    public static void reStart() {
+        Scene menuScene = new Scene(MainMenu.createMenu());
+        stage.setScene(menuScene);
+        stage.setTitle("Plant VS Zombie - Main Menu");
+        stage.setResizable(false);
+        stage.show();
     }
 
     @Override

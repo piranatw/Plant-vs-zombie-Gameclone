@@ -20,9 +20,9 @@ import javafx.scene.paint.Color;
 public class PvzPane extends StackPane {
     private ArrayList<PvzSquare> allTiles;
     private GridPane gridPane;
-    private Pane bulletLayer;
-    private Pane zombieLayer;
-    private Pane plantLayer;
+    private static Pane bulletLayer;
+    private static Pane zombieLayer;
+    private static Pane plantLayer;
 
     // IMPORTANT FIX: Store a reference to the slot
     private Slot slot;
@@ -129,5 +129,30 @@ public class PvzPane extends StackPane {
 
     public GridPane getGridPane() {
         return gridPane;
+        
     }
+
+	public void setAllTiles(ArrayList<PvzSquare> allTiles) {
+		this.allTiles = allTiles;
+	}
+
+	public void setGridPane(GridPane gridPane) {
+		this.gridPane = gridPane;
+	}
+
+	public void setBulletLayer(Pane bulletLayer) {
+		this.bulletLayer = bulletLayer;
+	}
+
+	public static  void setZombieLayer(Pane zombieLayer) {
+		PvzPane.zombieLayer = zombieLayer;
+	}
+
+	public void setPlantLayer(Pane plantLayer) {
+		this.plantLayer = plantLayer;
+	}
+
+	public void setSlot(Slot slot) {
+		this.slot = slot;
+	}
 }

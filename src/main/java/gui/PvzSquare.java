@@ -48,6 +48,7 @@ public class PvzSquare extends Pane {
 
     public PvzSquare(int xPosition, int yPosition) {
         super();
+        this.setStyle("-fx-border-color: #6eaa4c; -fx-border-width: 2; -fx-background-color: #d4f7b2;");
         this.plantImageView = new ImageView();
         this.getChildren().add(plantImageView);
         this.isPlanted = false;
@@ -81,6 +82,7 @@ public class PvzSquare extends Pane {
         
         // Debug output to trace execution
         System.out.println("Attempting to plant. Current state: isPlanted=" + isPlanted);
+        System.out.println(this.getxPosition());
         
         // Get the selected card
         PlantsCard card = slotToUse.getSelectedCard();
