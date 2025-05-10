@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import logic.Plantable;
+import main.GameLogic;
 
 public class BasicZombie extends Zombie {
     private double velocity = -1; // Pixels per frame
@@ -34,6 +35,9 @@ public class BasicZombie extends Zombie {
             if (isAlive) {
                 setLayoutX((double)(getLayoutX()) + (double)this.velocity);
             }
+            if(getLayoutX() < 0){
+                GameLogic.shutdown();
+            }
         }));
         movementTimeline.setCycleCount(Timeline.INDEFINITE);
         movementTimeline.play();
@@ -51,7 +55,7 @@ public class BasicZombie extends Zombie {
         
         if (attackTimeline != null)
             return;
-            
+
         attackTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             plant.takeDamage(10);
             if (plant.isDied()) {

@@ -1,178 +1,24 @@
 package main;
 
-import base.BasicZombie;
-import base.Sun;
-import base.Sunny;
-import gui.PvzPane;
-import gui.PvzSquare;
-import gui.Slot;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Main extends Application {
 
-    private PvzPane pvzPane;
-    private Slot slot;
-    private int wave = 1;
-    private CollisionManager collisionManager;
-
     @Override
     public void start(Stage primaryStage) {
-        try {
-            // Main layout container
-            VBox root = new VBox();
-            root.setPadding(new Insets(10));
-            root.setSpacing(10);
-            root.setPrefHeight(750);
-            root.setPrefWidth(950);
-
-            // Initialize UI components
-            slot = new Slot(); // this manages card selection
-            pvzPane = new PvzPane(slot); // this holds the game grid
-
-            // Initialize collision manager
-            collisionManager = new CollisionManager(pvzPane);
-
-            // Hook up click listeners on PvzTiles to plant
-            pvzPane.getAllTiles().forEach(tile -> {
-                tile.setOnMouseClicked(e -> {
-                    if (e.getButton() == MouseButton.PRIMARY) {
-                        tile.plantIfPossible(slot);
-                    }
-                });
-            });
-
-            // Add components to root
-            root.getChildren().addAll(slot, pvzPane);
-
-            // Scene setup
-            Scene scene = new Scene(root, 950, 750);
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("Plants Vs Zombies");
-            primaryStage.setResizable(false);
-            primaryStage.show();
-
-            System.out.println("UI loaded successfully");
-
-            // Start game loop
-            startGameLoop();
-        } catch (Exception e) {
-            System.err.println("Error starting application: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private void startGameLoop() {
-        addDebugButtons();
-        int zombiesPerWave = wave * 10;
-        Timeline sunSpawner = new Timeline();
-        KeyFrame sunFrame = new KeyFrame(Duration.seconds(5), e -> {
-            spawnSun();
-        });
-        sunSpawner.getKeyFrames().add(sunFrame);
-        sunSpawner.setCycleCount(Timeline.INDEFINITE);
-        sunSpawner.play();
-        Timeline zombieSpawner = new Timeline();
-        for (int i = 0; i < zombiesPerWave; i++) {
-            // Delay each zombie spawn by i * 3 seconds
-            KeyFrame spawnFrame = new KeyFrame(Duration.seconds(i * 3), e -> spawnZombie());
-            zombieSpawner.getKeyFrames().add(spawnFrame);
-        }
-        wave = wave + 1;
-        zombieSpawner.play();
-    }
-
-    private void spawnSun() {
-        Platform.runLater(() -> {
-            double x = Math.random() * (pvzPane.getWidth() - 100);
-            double y = -200;
-            Sun sun = new Sun(pvzPane);
-            sun.setManaged(false);
-            sun.setLayoutX(x);
-            sun.setLayoutY(y);
-            pvzPane.getChildren().add(sun);
-            sun.move(x, y, "normal");
-        });
-    }
-
-    private void spawnZombie() {
-        new Thread(() -> {
-            try {
-                Thread.sleep(10000); // Sleep 1 second in background thread
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Update the UI after delay
-            javafx.application.Platform.runLater(() -> {
-                BasicZombie zombie = new BasicZombie();
-                // Get a random row (0-4) for zombie placement
-                int row = (int) (Math.random() * 5);
-
-                // Add zombie to the right side of the grid (column 8)
-                // Position zombie at the right edge of the grid in the appropriate row //
-                // Assuming each column is ~100px wide (8 * 100)
-                PvzSquare targetTile = pvzPane.getAllTiles().get(row); // First column of the row
-                double tileY = targetTile.getLayoutY();
-                zombie.setLayoutY(tileY - (zombie.getFitHeight() - targetTile.getHeight()) / 2); // vertically center
-                zombie.setLayoutX(900);
-                // Add zombie to the proper layer in PvzPane
-                pvzPane.getZombieLayer().getChildren().add(zombie);
-            });
-        }).start();
+        MainMenu mainMenu = new MainMenu(primaryStage);
+        Scene menuScene = new Scene(mainMenu.createMenu());
+        primaryStage.setScene(menuScene);
+        primaryStage.setTitle("Plant VS Zombie - Main Menu");
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     @Override
     public void stop() {
-        // Clean up resources
-        if (collisionManager != null) {
-            collisionManager.stop();
-        }
-    }
-
-    private void addDebugButtons() {
-        // Create a simple debug panel
-        HBox debugPanel = new HBox(10);
-        debugPanel.setPadding(new Insets(5));
-        debugPanel.setBackground(new Background(new BackgroundFill(
-                Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        // Button to force select first card
-        Button forceSelectBtn = new Button("Force Select First Card");
-        forceSelectBtn.setOnAction(e -> slot.forceSelectFirstCard());
-
-        // Button to print game state
-        Button printStateBtn = new Button("Print Game State");
-        printStateBtn.setOnAction(e -> {
-            System.out.println("=== GAME STATE ===");
-            System.out.println("Selected card: " +
-                    (slot.getSelectedCard() == null ? "NONE" : slot.getSelectedCard().getClass().getSimpleName()));
-            System.out.println("Sun amount: " + Sunny.getSunAmount());
-            System.out.println("==================");
-        });
-
-        // Add buttons to panel
-        debugPanel.getChildren().addAll(forceSelectBtn, printStateBtn);
-
-        // Add panel to your game scene
-        // mainLayout.getChildren().add(debugPanel); // Add to your main layout
-
-        // Or if using BorderPane:
-        // borderPane.setBottom(debugPanel);
+        GameLogic.shutdown(); // Static for simplicity, you could refactor
     }
 
     public static void main(String[] args) {
