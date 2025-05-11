@@ -3,11 +3,11 @@ package main;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import base.Zombie;
-import base.BasicZombie;
+
 import base.Bullet;
 import base.Cherrybomb;
 import base.Potatomine;
+import base.Zombie;
 import gui.PvzPane;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -24,6 +24,12 @@ public class CollisionManager {
         initCollisionDetection();
     }
 
+    public void stop() {
+        if (collisionTimer != null) {
+            collisionTimer.stop();
+        }
+    }
+
     private void initCollisionDetection() {
         collisionTimer = new AnimationTimer() {
             @Override
@@ -34,20 +40,11 @@ public class CollisionManager {
         collisionTimer.start();
     }
 
-    public void stop() {
-        if (collisionTimer != null) {
-            collisionTimer.stop();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     private void checkCollisions() {
-        // Get all bullets and zombies (you'll need to cast or filter them)
         List<Node> bulletNodes = new ArrayList<>(pvzPane.getBulletLayer().getChildren());
         List<Node> zombieNodes = new ArrayList<>(pvzPane.getZombieLayer().getChildren());
         List<Node> plantNodes = new ArrayList<>(pvzPane.getPlantLayer().getChildren());
 
-        // Check for collisions
         for (Node zombieNode : zombieNodes) {
             if (!(zombieNode instanceof Zombie))
                 continue;
@@ -59,93 +56,74 @@ public class CollisionManager {
                     continue;
                 Plantable plant = (Plantable) plantNode;
                 Bounds plantBounds = ((Node) plant).getBoundsInParent();
-                // System.out.println(plantBounds); // Check if the plant has non-zero bounds
-                //System.out.println("Checking zombie at " + zombieBounds + " against plant at " + plantBounds);
 
                 if (boundsIntersect(zombieBounds, plantBounds)) {
                     handleZombiePlantCollision(plant, zombie);
-                    break; // Assume one plant per tile
+                    break;
                 }
             }
         }
 
         for (Iterator<Node> bulletIt = bulletNodes.iterator(); bulletIt.hasNext();) {
             Node bulletNode = bulletIt.next();
-
             Bullet bullet = (Bullet) bulletNode;
-
-            // Get bullet bounds relative to the parent (bulletLayer)
             Bounds bulletBounds = bullet.getBoundsInParent();
 
-            // Check against all zombies
-            for (Iterator<Node> zombieIt = zombieNodes.iterator(); zombieIt.hasNext();) {
-                Node zombieNode = zombieIt.next();
-
+            for (Node zombieNode : zombieNodes) {
                 if (!(zombieNode instanceof Zombie))
                     continue;
                 Zombie zombie = (Zombie) zombieNode;
-
-                // Get zombie bounds relative to the parent (zombieLayer)
                 Bounds zombieBounds = zombie.getBoundsInParent();
 
-                // Since both panes are aligned with the same positioning system,
-                // we can directly compare the bounds
                 if (boundsIntersect(bulletBounds, zombieBounds)) {
-                    // Handle collision
-                    if (bullet.getName() == "frost" && !zombie.isFrozen()) {
+                    if ("frost".equals(bullet.getName()) && !zombie.isFrozen()) {
                         handleFrostCollision(bullet, zombie);
                     } else {
                         handleCollision(bullet, zombie);
                     }
-                    break; // Break inner loop if bullet hit a zombie
+                    break;
                 }
             }
         }
-
     }
 
     private boolean boundsIntersect(Bounds a, Bounds b) {
-        // Check if two bounds intersect
         return a.intersects(b);
     }
-    private void handleZombiePlantCollision(Plantable plant,Zombie zombie){
-        if(plant instanceof Potatomine){
-            zombie.takeDamage(30);
+
+    private void handleZombiePlantCollision(Plantable plant, Zombie zombie) {
+        if (plant instanceof Potatomine) {
+            zombie.takeDamage(50);
             plant.takeDamage(10);
-            Platform.runLater(() -> {
-                pvzPane.getPlantLayer().getChildren().remove(plant);
-            });
-        }else if(plant instanceof Cherrybomb){
+            Platform.runLater(() -> pvzPane.getPlantLayer().getChildren().remove(plant));
+        } else if (plant instanceof Cherrybomb) {
             zombie.takeDamage(200000);
             plant.takeDamage(10);
             Platform.runLater(() -> {
                 pvzPane.getZombieLayer().getChildren().remove(zombie);
                 pvzPane.getPlantLayer().getChildren().remove(plant);
             });
-        }
-        else{
+        } else {
             zombie.startAttacking(plant);
         }
     }
+
     private void handleFrostCollision(Bullet bullet, Zombie zombie) {
         zombie.takeDamage(bullet.getDamage());
         zombie.Frozen();
+        Platform.runLater(() -> pvzPane.getBulletLayer().getChildren().remove(bullet));
+        removeZombieIfDead(zombie);
     }
 
     private void handleCollision(Bullet bullet, Zombie zombie) {
-        // Handle the collision (damage zombie, remove bullet)
         zombie.takeDamage(bullet.getDamage());
+        Platform.runLater(() -> pvzPane.getBulletLayer().getChildren().remove(bullet));
+        removeZombieIfDead(zombie);
+    }
 
-        // Remove bullet from the scene
-        javafx.application.Platform.runLater(() -> {
-            pvzPane.getBulletLayer().getChildren().remove(bullet);
-        });
-
-        // If zombie health <= 0, remove it
+    private void removeZombieIfDead(Zombie zombie) {
         if (zombie.getHealth() <= 0) {
-            javafx.application.Platform.runLater(() -> {
-                pvzPane.getZombieLayer().getChildren().remove(zombie);
-            });
+            Platform.runLater(() -> pvzPane.getZombieLayer().getChildren().remove(zombie));
         }
     }
 }

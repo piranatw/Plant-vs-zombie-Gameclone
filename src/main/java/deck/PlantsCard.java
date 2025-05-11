@@ -1,4 +1,4 @@
-package Card;
+package deck;
 
 import base.Plant;
 import base.Sunny;

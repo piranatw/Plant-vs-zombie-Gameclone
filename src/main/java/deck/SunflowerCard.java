@@ -1,11 +1,11 @@
-package Card;
+package deck;
 
 import javafx.scene.image.Image;
 
-public class PeaShooterCard extends PlantsCard{
-    public PeaShooterCard() {
-        super(8,100);
-        String imagePath = "peaShooterCard.jpg";
+public class SunflowerCard extends PlantsCard{
+    public SunflowerCard(){
+        super(5,50);
+        String imagePath = "SunflowerCard.jpg";
         String resourceUrl = ClassLoader.getSystemResource(imagePath).toString();
         this.setImage(new Image(resourceUrl));
         this.setFitWidth(100);

@@ -14,9 +14,8 @@ import javafx.stage.Stage;
 public class MainMenu {
     private static Stage primaryStage;
 
-    public MainMenu(Stage primaryStage) {
-        MainMenu.primaryStage = primaryStage;
-
+    public MainMenu(Stage stage) {
+        MainMenu.primaryStage = stage;
     }
 
     public static VBox createMenu() {
@@ -31,35 +30,25 @@ public class MainMenu {
         title.setTextFill(Color.DARKGREEN);
         title.setStyle("-fx-effect: dropshadow(gaussian, darkgreen, 4, 0.5, 2, 2);");
 
-        // Styled buttons
+        // Difficulty buttons
         Button easyButton = createStyledButton("Easy", 1, 15, "#a3d977", "#b5ec85");
         Button normalButton = createStyledButton("Normal", 2, 45, "#f4d35e", "#f7e17a");
         Button hardButton = createStyledButton("Hard", 3, 84, "#ff6b6b", "#ff8787");
 
-        Button quitButton = new Button("Quit");
-        quitButton.setFont(Font.font("Comic Sans MS", 24));
-        quitButton.setStyle(
-                "-fx-background-color: #ff4c4c; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;");
-        quitButton.setOnMouseEntered(e -> quitButton.setStyle(
-                "-fx-background-color: #ff0000; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;"));
-        quitButton.setOnMouseExited(e -> quitButton.setStyle(
-                "-fx-background-color: #ff4c4c; -fx-text-fill: white; -fx-background-radius: 15; -fx-pref-width: 200;"));
+        // Quit button
+        Button quitButton = createStyledButton("Quit", "#ff4c4c", "#ff0000");
         quitButton.setOnAction(e -> Platform.exit());
 
         menuLayout.getChildren().addAll(title, easyButton, normalButton, hardButton, quitButton);
-
         return menuLayout;
     }
 
     private static Button createStyledButton(String label, int wave, int zombies, String baseColor, String hoverColor) {
         Button button = new Button(label);
         button.setFont(Font.font("Comic Sans MS", 24));
-        button.setStyle("-fx-background-color: " + baseColor
-                + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;");
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + hoverColor
-                + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + baseColor
-                + "; -fx-text-fill: darkgreen; -fx-background-radius: 15; -fx-pref-width: 200;"));
+        button.setStyle(getButtonStyle(baseColor));
+        button.setOnMouseEntered(e -> button.setStyle(getButtonStyle(hoverColor)));
+        button.setOnMouseExited(e -> button.setStyle(getButtonStyle(baseColor)));
         button.setOnAction(e -> {
             GameLogic.setWave(wave);
             GameLogic.setAllZombies(zombies);
@@ -69,23 +58,37 @@ public class MainMenu {
         return button;
     }
 
+    private static Button createStyledButton(String label, String baseColor, String hoverColor) {
+        Button button = new Button(label);
+        button.setFont(Font.font("Comic Sans MS", 24));
+        button.setStyle(getButtonStyle(baseColor));
+        button.setOnMouseEntered(e -> button.setStyle(getButtonStyle(hoverColor)));
+        button.setOnMouseExited(e -> button.setStyle(getButtonStyle(baseColor)));
+        return button;
+    }
+
+    private static String getButtonStyle(String color) {
+        return "-fx-background-color: " + color + "; " +
+               "-fx-text-fill: darkgreen; " +
+               "-fx-background-radius: 15; " +
+               "-fx-pref-width: 200;";
+    }
+
     private static void startGame() {
         GameLogic gameLogic = GameLogic.getInstance();
         VBox gameRoot = gameLogic.initializeGame();
         Scene gameScene = new Scene(gameRoot, 950, 750);
-        primaryStage.setScene(gameScene);
 
-        primaryStage.setTitle("Plants Vs Zombies");
+        primaryStage.setScene(gameScene);
+        primaryStage.setTitle("Plants vs Zombies");
+        primaryStage.setFullScreenExitHint("");
+        primaryStage.setFullScreen(false);
+
         gameScene.setOnKeyPressed(e -> {
-            switch (e.getCode()) {
-                case F11:
-                    primaryStage.setFullScreen(!primaryStage.isFullScreen());
-                    break;
-                default:
-                    break;
+            if (e.getCode() == javafx.scene.input.KeyCode.F11) {
+                primaryStage.setFullScreen(!primaryStage.isFullScreen());
             }
         });
-        primaryStage.setFullScreenExitHint(""); // empty string disables it
 
         GameLogic.startGame();
     }

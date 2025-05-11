@@ -2,7 +2,7 @@ package gui;
 
 import java.util.ArrayList;
 
-import Card.PlantsCard;
+import deck.PlantsCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;

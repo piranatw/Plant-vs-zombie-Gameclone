@@ -1,12 +1,5 @@
 package gui;
 
-import Card.CherryBombCard;
-import Card.FrostyPeaShooterCard;
-import Card.PeaShooterCard;
-import Card.PlantsCard;
-import Card.PotatoMineCard;
-import Card.SunflowerCard;
-import Card.WallnutCard;
 import base.Cherrybomb;
 import base.FrostyPeashooter;
 import base.Peashooter;
@@ -14,6 +7,13 @@ import base.Potatomine;
 import base.Sunflower;
 import base.Sunny;
 import base.Wallnut;
+import deck.CherryBombCard;
+import deck.FrostyPeaShooterCard;
+import deck.PeaShooterCard;
+import deck.PlantsCard;
+import deck.PotatoMineCard;
+import deck.SunflowerCard;
+import deck.WallnutCard;
 import javafx.animation.PauseTransition;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;

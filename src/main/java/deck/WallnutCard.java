@@ -1,11 +1,11 @@
-package Card;
+package deck;
 
 import javafx.scene.image.Image;
 
-public class FrostyPeaShooterCard extends PlantsCard{
-    public FrostyPeaShooterCard(){
-        super(20,175);
-        String imagePath = "frostyPea.jpg";
+public class WallnutCard extends PlantsCard{
+    public WallnutCard(){
+        super(20,50);
+        String imagePath = "wallnutCard.jpg";
         String resourceURL = ClassLoader.getSystemResource(imagePath).toString();
         this.setImage(new Image(resourceURL));
         this.setFitWidth(100);

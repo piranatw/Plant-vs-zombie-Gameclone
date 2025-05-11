@@ -3,7 +3,6 @@ package main;
 import base.BasicZombie;
 import base.CapZombie;
 import base.Sun;
-import base.Sunny;
 import gui.PvzPane;
 import gui.PvzSquare;
 import gui.Slot;
@@ -12,15 +11,9 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class GameLogic {
@@ -30,6 +23,7 @@ public class GameLogic {
     private static PvzPane pvzPane;
     private Slot slot;
     private VBox root;
+
     private static int wave = 1;
     private static int allZombies;
 
@@ -47,6 +41,7 @@ public class GameLogic {
         root.setPrefHeight(750);
         root.setPrefWidth(950);
         root.setStyle("-fx-font-family: 'Comic Sans MS';");
+
         slot = new Slot();
         pvzPane = new PvzPane(slot);
         pvzPane.setStyle("-fx-background-color: linear-gradient(to bottom, #b7e085, #e0ffc1);");
@@ -59,8 +54,7 @@ public class GameLogic {
             }
         }));
 
-        root.getChildren().addAll(slot, pvzPane, createDebugPanel());
-
+        root.getChildren().addAll(slot, pvzPane);
         return root;
     }
 
@@ -74,35 +68,29 @@ public class GameLogic {
         Timeline sunSpawner = new Timeline(new KeyFrame(Duration.seconds(6), e -> spawnSun()));
         sunSpawner.setCycleCount(Timeline.INDEFINITE);
         sunSpawner.play();
-        System.out.println("zombies perwave" + zombiesPerWave);
+
         Timeline zombieSpawner = new Timeline();
         for (int i = 0; i < zombiesPerWave; i++) {
             KeyFrame spawnFrame = new KeyFrame(Duration.seconds(i * 10), e -> spawnZombie());
-            // spawn 2 zombies at a time after 5th wave
-            if (i > 5)
-                spawnFrame = new KeyFrame(Duration.seconds(i * 9), e -> {
-                    for (int j = 0; j < 2; j++)
-                        spawnZombie();
-                });
-            if (i > 12)
+
+            if (i > 5) {
+                spawnFrame = new KeyFrame(Duration.seconds(i * 9), e -> spawnZombies(2));
+            }
+            if (i > 12) {
                 spawnFrame = new KeyFrame(Duration.seconds(i * 8), e -> {
-                    for (int j = 0; j < 3; j++){
-                        spawnZombie();
-                    }
+                    spawnZombies(3);
                     spawnCapZombie();
                 });
-            if (i > 20)
-                spawnFrame = new KeyFrame(Duration.seconds(i * 7), e -> {
-                    for (int j = 0; j < 4; j++)
-                        spawnZombie();
-                });
-            if (i > 25)
+            }
+            if (i > 20) {
+                spawnFrame = new KeyFrame(Duration.seconds(i * 7), e -> spawnZombies(4));
+            }
+            if (i > 25) {
                 spawnFrame = new KeyFrame(Duration.seconds(i * 6), e -> {
-                    for (int j = 0; j < 5; j++)
-                        spawnZombie();
-                    for(int j = 0; j < 3 ;j++)
-                        spawnCapZombie();
+                    spawnZombies(5);
+                    spawnCapZombies(3);
                 });
+            }
             zombieSpawner.getKeyFrames().add(spawnFrame);
         }
         zombieSpawner.play();
@@ -140,6 +128,7 @@ public class GameLogic {
             });
         }).start();
     }
+
     private static void spawnCapZombie() {
         new Thread(() -> {
             try {
@@ -158,25 +147,17 @@ public class GameLogic {
             });
         }).start();
     }
-    private HBox createDebugPanel() {
-        HBox debugPanel = new HBox(10);
-        debugPanel.setPadding(new Insets(5));
-        debugPanel.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Button forceSelectBtn = new Button("Force Select First Card");
-        forceSelectBtn.setOnAction(e -> slot.forceSelectFirstCard());
+    private static void spawnZombies(int count) {
+        for (int j = 0; j < count; j++) {
+            spawnZombie();
+        }
+    }
 
-        Button printStateBtn = new Button("Print Game State");
-        printStateBtn.setOnAction(e -> {
-            System.out.println("=== GAME STATE ===");
-            System.out.println("Selected card: " +
-                    (slot.getSelectedCard() == null ? "NONE" : slot.getSelectedCard().getClass().getSimpleName()));
-            System.out.println("Sun amount: " + Sunny.getSunAmount());
-            System.out.println("==================");
-        });
-
-        debugPanel.getChildren().addAll(forceSelectBtn, printStateBtn);
-        return debugPanel;
+    private static void spawnCapZombies(int count) {
+        for (int j = 0; j < count; j++) {
+            spawnCapZombie();
+        }
     }
 
     public static void shutdown() {
@@ -191,7 +172,6 @@ public class GameLogic {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 System.out.println(GameLogic.getAllZombies());
@@ -207,20 +187,6 @@ public class GameLogic {
                             Platform.exit();
                         }
                     });
-                    // Platform.runLater(() -> {
-                    // Alert cnfrmAlert = new Alert(Alert.AlertType.CONFIRMATION,
-                    // "VICTORY!!!/n you just defeated all zombies",
-                    // ButtonType.YES, ButtonType.NO);
-                    // cnfrmAlert.setTitle("Congratulations!");
-                    // cnfrmAlert.setHeaderText(null);
-                    // cnfrmAlert.showAndWait();
-                    //
-                    // if (cnfrmAlert.getResult() == ButtonType.YES) {
-                    // Main.reStart();
-                    // } else {
-                    // Platform.exit();
-                    // }
-                    // });
                     break;
                 }
             }
@@ -241,9 +207,6 @@ public class GameLogic {
     }
 
     public static void setAllZombies(int allZombies) {
-        if (allZombies < 0)
-            allZombies = 0;
-        GameLogic.allZombies = allZombies;
+        GameLogic.allZombies = Math.max(allZombies, 0);
     }
-
 }

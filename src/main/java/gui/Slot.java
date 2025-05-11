@@ -1,21 +1,19 @@
 package gui;
-import Card.CherryBombCard;
-import Card.FrostyPeaShooterCard;
-import Card.PeaShooterCard;
-import Card.PlantsCard;
-import Card.PotatoMineCard;
-import Card.SunflowerCard;
-import Card.WallnutCard;
 import base.Sunny;
+import deck.CherryBombCard;
+import deck.FrostyPeaShooterCard;
+import deck.PeaShooterCard;
+import deck.PlantsCard;
+import deck.PotatoMineCard;
+import deck.SunflowerCard;
+import deck.WallnutCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class Slot extends HBox {
 
@@ -45,9 +43,6 @@ public class Slot extends HBox {
         };
         
         // Add debug info directly to the UI
-        Label debugLabel = new Label("Click on cards to select them");
-        debugLabel.setTextFill(Color.WHITE);
-        debugLabel.setFont(new Font(14));
         
         // Initialize Sunny first
         Sunny sun = new Sunny();
@@ -60,7 +55,6 @@ public class Slot extends HBox {
         System.out.println("Initial sun amount set to: " + Sunny.getSunAmount());
         
         // Add debug label
-        this.getChildren().add(debugLabel);
         
         // Add all cards and configure them
         for (PlantsCard card : cards) {
