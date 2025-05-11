@@ -27,19 +27,18 @@ public class Bullet extends ImageView {
             public void handle(long now) {
             	if (plant instanceof Plantable) {
 	                if(((Plantable) plant).isDied()){
+                        plant.getBulletPane().getChildren().remove(Bullet.this);
 	                    timer.stop();
-	                    plant.getBulletPane().getChildren().remove(Bullet.this);
-	
 	                }
             	}
                 setLayoutX(getLayoutX() + SPEED);
 
                 // Remove if off-screen
                 if (getLayoutX() > 950) {
-                    stop();
                     if (getParent() != null) {
                         ((Pane) getParent()).getChildren().remove(Bullet.this);
                     }
+                    timer.stop();
                 }
             }
         };
@@ -54,10 +53,5 @@ public class Bullet extends ImageView {
     }
     public String getName(){
         return this.name;
-    }
-    public void stop() {
-        if (timer != null) {
-            timer.stop();
-        }
     }
 }

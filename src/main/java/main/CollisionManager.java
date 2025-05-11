@@ -93,7 +93,7 @@ public class CollisionManager {
 
     private void handleZombiePlantCollision(Plantable plant, Zombie zombie) {
         if (plant instanceof Potatomine) {
-            zombie.takeDamage(50);
+            zombie.takeDamage(100);
             plant.takeDamage(10);
             Platform.runLater(() -> pvzPane.getPlantLayer().getChildren().remove(plant));
         } else if (plant instanceof Cherrybomb) {

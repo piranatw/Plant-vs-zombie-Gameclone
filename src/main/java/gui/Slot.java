@@ -81,6 +81,7 @@ public class Slot extends HBox {
         // IMPORTANT FIX: Use setOnMouseClicked instead of addEventFilter
         // This ensures we directly set the handler rather than adding a filter
         card.setOnMouseClicked(event -> {
+            // System.out.println("YOoooooooooo");
             System.out.println("Card clicked: " + card.getClass().getSimpleName() + 
                               " (Cooldown: " + card.isOnCooldown() + 
                               ", Sun needed: " + card.getPrice() + 
@@ -159,14 +160,6 @@ public class Slot extends HBox {
     }
     
     // For debugging - force select the first card
-    public void forceSelectFirstCard() {
-        if (cards != null && cards.length > 0) {
-            PlantsCard firstCard = cards[0];
-            selectedCard = firstCard;
-            firstCard.setStyle("-fx-border-color: yellow; -fx-border-width: 3px;");
-            System.out.println("Force selected card: " + firstCard.getClass().getSimpleName());
-        }
-    }
     public void setSelectedCard(PlantsCard card) {
         this.selectedCard = card;
         System.out.println("selectedCard explicitly set to: " + 

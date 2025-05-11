@@ -1,5 +1,6 @@
 package main;
 
+
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 
 public class MainMenu {
     private static Stage primaryStage;
-
+    private static Scene scene;
     public MainMenu(Stage stage) {
         MainMenu.primaryStage = stage;
     }
@@ -77,19 +78,20 @@ public class MainMenu {
     private static void startGame() {
         GameLogic gameLogic = GameLogic.getInstance();
         VBox gameRoot = gameLogic.initializeGame();
-        Scene gameScene = new Scene(gameRoot, 950, 750);
-
-        primaryStage.setScene(gameScene);
+        scene = new Scene(gameRoot, 950, 750);
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Plants vs Zombies");
         primaryStage.setFullScreenExitHint("");
         primaryStage.setFullScreen(false);
-
-        gameScene.setOnKeyPressed(e -> {
+        scene.setOnKeyPressed(e -> {
             if (e.getCode() == javafx.scene.input.KeyCode.F11) {
                 primaryStage.setFullScreen(!primaryStage.isFullScreen());
             }
         });
 
         GameLogic.startGame();
+    }
+    public static Scene getScene(){
+        return scene;
     }
 }

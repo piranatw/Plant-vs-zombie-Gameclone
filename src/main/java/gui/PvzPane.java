@@ -47,14 +47,17 @@ public class PvzPane extends StackPane {
         bulletLayer = new Pane();
         bulletLayer.setPickOnBounds(false); // Makes the pane transparent to mouse events
         bulletLayer.setBackground(Background.EMPTY);
+        bulletLayer.setMouseTransparent(true);
         // Create Sun Layer
 
         // Create zombie layer
         zombieLayer = new Pane();
+        zombieLayer.setMouseTransparent(true);
         zombieLayer.setPickOnBounds(false);
         zombieLayer.setBackground(Background.EMPTY);
 
         plantLayer = new Pane();
+        plantLayer.setMouseTransparent(true);
         plantLayer.setPickOnBounds(false);
         plantLayer.setBackground(Background.EMPTY);
         // Add layers to stack pane - order matters for z-index

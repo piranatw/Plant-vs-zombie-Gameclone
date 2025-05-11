@@ -76,16 +76,16 @@ public class GameLogic {
             if (i > 5) {
                 spawnFrame = new KeyFrame(Duration.seconds(i * 9), e -> spawnZombies(2));
             }
-            if (i > 12) {
+            else if (i > 12) {
                 spawnFrame = new KeyFrame(Duration.seconds(i * 8), e -> {
                     spawnZombies(3);
                     spawnCapZombie();
                 });
             }
-            if (i > 20) {
+            else if (i > 20) {
                 spawnFrame = new KeyFrame(Duration.seconds(i * 7), e -> spawnZombies(4));
             }
-            if (i > 25) {
+            else if (i > 25) {
                 spawnFrame = new KeyFrame(Duration.seconds(i * 6), e -> {
                     spawnZombies(5);
                     spawnCapZombies(3);

@@ -10,7 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         Main.primaryStage = stage;
-
+        MainMenu mainMenu = new MainMenu(stage);
         Scene menuScene = new Scene(MainMenu.createMenu());
         primaryStage.setScene(menuScene);
         primaryStage.setTitle("Plants vs. Zombies - Main Menu");

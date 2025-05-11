@@ -38,121 +38,116 @@ public class PvzSquare extends Pane {
     private Wallnut wallnut;
     private Cherrybomb cherry;
     private Sunflower sunflower;
-    // Reference to the main game pane (will be set by PvzPane)
+
+    // References to layers
     private static Pane bulletLayer;
     private static PvzPane pvzPane;
     private static Pane plantLayer;
-    
-    // IMPORTANT FIX: Keep a reference to the slot for reliable access
+
+    // Slot for plant placement
     private Slot currentSlot;
 
     public PvzSquare(int xPosition, int yPosition) {
         super();
+        initializeDefaults();
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+    }
+
+    private void initializeDefaults() {
         this.setStyle("-fx-border-color: #6eaa4c; -fx-border-width: 2; -fx-background-color: #d4f7b2;");
         this.plantImageView = new ImageView();
         this.getChildren().add(plantImageView);
         this.isPlanted = false;
         this.basecolor = Color.LIGHTGREEN;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
         this.setPrefHeight(100);
         this.setPrefWidth(100);
-        this.setMinHeight(100);
-        this.setMinWidth(100);
-        BackgroundFill backgroundFill = new BackgroundFill(basecolor, null, null);
-        this.setBackground(new Background(backgroundFill));
-        BorderStroke borderStroke = new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                new BorderWidths(1));
-        this.setBorder(new Border(borderStroke));
+        setBackground(new Background(new BackgroundFill(basecolor, null, null)));
+        setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
     }
-    
-    // IMPORTANT FIX: New method to set the slot reference
+
+    // Set reference to the slot from which the plant is selected
     public void setSlot(Slot slot) {
         this.currentSlot = slot;
     }
 
     public void plantIfPossible(Slot slot) {
-        // Use the provided slot parameter, but fall back to the instance variable if needed
+        // Use the provided slot parameter, but fallback to instance variable if necessary
         Slot slotToUse = (slot != null) ? slot : currentSlot;
-        
-        if (slotToUse == null) {
-            System.out.println("ERROR: No slot available to plant from!");
+        if (slotToUse == null || !canPlant(slotToUse)) {
             return;
         }
-        
-        // Debug output to trace execution
-        System.out.println("Attempting to plant. Current state: isPlanted=" + isPlanted);
-        System.out.println(this.getxPosition());
-        
-        // Get the selected card
+
+        // Get selected card and plant
         PlantsCard card = slotToUse.getSelectedCard();
-        
-        // Validation checks with detailed logging
-        if (card == null) {
-            System.out.println("No card selected");
-            return;
+        plantPlant(card, slotToUse);
+    }
+
+    private boolean canPlant(Slot slotToUse) {
+        if (slotToUse.getSelectedCard() == null) {
+            System.out.println("ERROR: No card selected");
+            return false;
         }
-        
         if (isPlanted) {
             System.out.println("Square already has a plant");
-            return;
+            return false;
         }
-        
-        if (card.isOnCooldown()) {
+        if (slotToUse.getSelectedCard().isOnCooldown()) {
             System.out.println("Card is on cooldown");
-            return;
+            return false;
         }
-        
-        if (Sunny.getSunAmount() < card.getPrice()) {
-            System.out.println("Not enough sun. Have: " + Sunny.getSunAmount() + ", Need: " + card.getPrice());
-            return;
+        if (Sunny.getSunAmount() < slotToUse.getSelectedCard().getPrice()) {
+            System.out.println("Not enough sun: " + Sunny.getSunAmount());
+            return false;
         }
-    
-        // If we passed all checks, plant the plant
+        return true;
+    }
+
+    private void plantPlant(PlantsCard card, Slot slotToUse) {
         System.out.println("Planting: " + card.getClass().getSimpleName());
-        
-        // Mark the square as planted FIRST
+
+        // Mark square as planted
         this.setPlanted(true);
         
         // Spend sun
         Sunny.spendSun(card.getPrice());
-    
-        // Get scene location
+
+        // Get coordinates for the plant
         javafx.geometry.Bounds boundsInScene = this.localToScene(this.getBoundsInLocal());
         double bulletLayerX = bulletLayer.sceneToLocal(boundsInScene.getMinX(), 0).getX();
         double bulletLayerY = bulletLayer.sceneToLocal(0, boundsInScene.getMinY()).getY();
-    
-        System.out.println("Plant location: " + bulletLayerX + ", " + bulletLayerY);
-        
-        // Add correct plant
+
+        // Add the corresponding plant based on the card type
+        addPlant(card, bulletLayerX, bulletLayerY);
+
+        // Clear selection and start cooldown
+        slotToUse.clearSelectedCard();
+        startCardCooldown(card);
+    }
+
+    private void addPlant(PlantsCard card, double bulletLayerX, double bulletLayerY) {
         if (card instanceof PeaShooterCard) {
-            peashooter = new Peashooter(bulletLayer, bulletLayerX, bulletLayerY,this);
+            peashooter = new Peashooter(bulletLayer, bulletLayerX, bulletLayerY, this);
             plantLayer.getChildren().add(peashooter);
         } else if (card instanceof FrostyPeaShooterCard) {
-            frostyshooter = new FrostyPeashooter(bulletLayer, bulletLayerX, bulletLayerY,this);
+            frostyshooter = new FrostyPeashooter(bulletLayer, bulletLayerX, bulletLayerY, this);
             plantLayer.getChildren().add(frostyshooter);
         } else if (card instanceof WallnutCard) {
-            wallnut = new Wallnut(bulletLayer, bulletLayerX, bulletLayerY,this);
+            wallnut = new Wallnut(bulletLayer, bulletLayerX, bulletLayerY, this);
             plantLayer.getChildren().add(wallnut);
         } else if (card instanceof CherryBombCard) {
-            cherry = new Cherrybomb(bulletLayer, bulletLayerX, bulletLayerY,this);
+            cherry = new Cherrybomb(bulletLayer, bulletLayerX, bulletLayerY, this);
             plantLayer.getChildren().add(cherry);
         } else if (card instanceof PotatoMineCard) {
-            potatomine = new Potatomine(bulletLayer, bulletLayerX, bulletLayerY,this);
+            potatomine = new Potatomine(bulletLayer, bulletLayerX, bulletLayerY, this);
             plantLayer.getChildren().add(potatomine);
         } else if (card instanceof SunflowerCard) {
-            sunflower = new Sunflower(bulletLayer, pvzPane,bulletLayerX, bulletLayerY,this);
+            sunflower = new Sunflower(bulletLayer, pvzPane, bulletLayerX, bulletLayerY, this);
             plantLayer.getChildren().add(sunflower);
         }
-        
-        // Visual indication that the square is planted
-        // BackgroundFill backgroundFill = new BackgroundFill(Color.web("#A8C66C"), null, null);
-        // this.setBackground(new Background(backgroundFill));
-    
-        // Clear selection
-        slotToUse.clearSelectedCard();
-    
-        // Start cooldown
+    }
+
+    private void startCardCooldown(PlantsCard card) {
         card.startCooldown();
         card.setOpacity(0.5);
         PauseTransition cooldown = new PauseTransition(javafx.util.Duration.seconds(card.getCooldown()));
@@ -162,19 +157,17 @@ public class PvzSquare extends Pane {
             System.out.println("Cooldown ended for: " + card.getClass().getSimpleName());
         });
         cooldown.play();
-        
-        System.out.println("Plant added successfully");
     }
-    
+
     public static void setPlantLayer(Pane layer) {
         plantLayer = layer;
     }
 
-    // Static method to set the bullet layer
     public static void setBulletLayer(Pane layer) {
         bulletLayer = layer;
     }
-    public static void setPvzPane(PvzPane layer){
+
+    public static void setPvzPane(PvzPane layer) {
         pvzPane = layer;
     }
 
