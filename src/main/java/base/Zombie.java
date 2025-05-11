@@ -101,7 +101,7 @@ public abstract class Zombie extends Characters implements Cloneable {
                 // Image(ClassLoader.getSystemResource("zombie-normal.gif").toString()));
                 this.setFitWidth(80);
                 this.setFitHeight(80);
-                if(this instanceof CapZombie){
+                if (this instanceof CapZombie) {
                     this.setFitWidth(120);
                     this.setFitHeight(90);
                 }
@@ -122,7 +122,9 @@ public abstract class Zombie extends Characters implements Cloneable {
 
     private void die() {
         isAlive = false;
-        attackTimeline.stop();
+        if (attackTimeline != null) {
+            attackTimeline.stop();
+        }
         if (movementTimeline != null) {
             movementTimeline.stop();
         }
