@@ -1,16 +1,20 @@
 package base;
 
-public class Plant extends Characters{
-    private int cooldown;
-    private int price;
-    public Plant(int cooldown,int price){
-        this.cooldown = cooldown;
-        this.price = price;
+import gui.PvzSquare;
+
+public abstract class Plant extends Characters{
+	
+	protected PvzSquare pvzSquare;
+    public Plant(int hp, double posX, double posY, int power, PvzSquare pvzSquare){
+    	super();
+		this.hp = hp;
+		this.posX = posX;
+		this.posY = posY;
+		this.power = power;
+		this.pvzSquare = pvzSquare;
     }
-    public int getPrice(){
-        return this.price;
-    }
-    public int getCooldown(){
-        return this.cooldown;
-    }
+
+    
+    public abstract void takeDamage(int damage);
+    public abstract boolean  isDied();
 }

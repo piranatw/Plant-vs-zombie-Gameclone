@@ -6,6 +6,7 @@ import java.util.List;
 
 import base.Bullet;
 import base.Cherrybomb;
+import base.Plant;
 import base.Potatomine;
 import base.Zombie;
 import gui.PvzPane;
@@ -13,7 +14,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import logic.Plantable;
+//import logic.Plantable;
 
 public class CollisionManager {
     private PvzPane pvzPane;
@@ -52,9 +53,9 @@ public class CollisionManager {
             Bounds zombieBounds = zombie.getBoundsInParent();
 
             for (Node plantNode : plantNodes) {
-                if (!(plantNode instanceof Plantable))
+                if (!(plantNode instanceof Plant))
                     continue;
-                Plantable plant = (Plantable) plantNode;
+                Plant plant = (Plant) plantNode;
                 Bounds plantBounds = ((Node) plant).getBoundsInParent();
 
                 if (boundsIntersect(zombieBounds, plantBounds)) {
@@ -66,32 +67,33 @@ public class CollisionManager {
 
         for (Iterator<Node> bulletIt = bulletNodes.iterator(); bulletIt.hasNext();) {
             Node bulletNode = bulletIt.next();
-            Bullet bullet = (Bullet) bulletNode;
-            Bounds bulletBounds = bullet.getBoundsInParent();
+            if (bulletNode instanceof Bullet) {
+                Bullet bullet = (Bullet) bulletNode;
+                Bounds bulletBounds = bullet.getBoundsInParent();
+                for (Node zombieNode : zombieNodes) {
+                    if (!(zombieNode instanceof Zombie))
+                        continue;
+                    Zombie zombie = (Zombie) zombieNode;
+                    Bounds zombieBounds = zombie.getBoundsInParent();
 
-            for (Node zombieNode : zombieNodes) {
-                if (!(zombieNode instanceof Zombie))
-                    continue;
-                Zombie zombie = (Zombie) zombieNode;
-                Bounds zombieBounds = zombie.getBoundsInParent();
-
-                if (boundsIntersect(bulletBounds, zombieBounds)) {
-                    if ("frost".equals(bullet.getName()) && !zombie.isFrozen()) {
-                        handleFrostCollision(bullet, zombie);
-                    } else {
-                        handleCollision(bullet, zombie);
+                    if (boundsIntersect(bulletBounds, zombieBounds)) {
+                        if ("frost".equals(bullet.getName()) && !zombie.isFrozen()) {
+                            handleFrostCollision(bullet, zombie);
+                        } else {
+                            handleCollision(bullet, zombie);
+                        }
+                        break;
                     }
-                    break;
                 }
             }
-        }
-    }
+        }}
+
 
     private boolean boundsIntersect(Bounds a, Bounds b) {
         return a.intersects(b);
     }
 
-    private void handleZombiePlantCollision(Plantable plant, Zombie zombie) {
+    private void handleZombiePlantCollision(Plant plant, Zombie zombie) {
         if (plant instanceof Potatomine) {
             zombie.takeDamage(100);
             plant.takeDamage(10);

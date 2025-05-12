@@ -4,10 +4,6 @@ import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 
 public class BasicZombie extends Zombie {
-    private double velocity = -1; // Pixels per frame
-    private Timeline movementTimeline;
-    private Timeline attackTimeline;
-    private static boolean GameOver = false;
 
     public BasicZombie() {
         super(100); // duration in seconds, initial health

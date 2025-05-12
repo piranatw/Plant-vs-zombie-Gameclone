@@ -1,61 +1,46 @@
 package base;
 
 import gui.PvzSquare;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import logic.Plantable;
+import logic.Explodable;
 
-public class Cherrybomb extends ImageView implements Plantable {
-    private Timeline shootingTimeline;
-    private double positionX;
-    private double positionY;
+public class Cherrybomb extends Plant implements Explodable {
     private Pane bulletPane;
-    private int health = 100000;
-    private PvzSquare pvzSquare;
 
     public Cherrybomb(Pane bulletPane, double x, double y, PvzSquare pvzSquare) {
-        // Store the bullet pane and position
-        this.pvzSquare = pvzSquare;
+        super(100000, x, y, 10, pvzSquare);  // Using parent constructor
         this.bulletPane = bulletPane;
-        this.positionX = x;
-        this.positionY = y;
         this.setLayoutX(x);
         this.setLayoutY(y);
-        // Set the image for visual representation
         this.setImage(new Image(ClassLoader.getSystemResource("cherrybomb.png").toString()));
         this.setFitWidth(100);
         this.setFitHeight(80);
     }
 
-    private void explosion() {
-        // Create a new bullet
-
-        this.health = 0;
+    public void explosion() {
+        this.hp = 0;
         this.setImage(new Image(ClassLoader.getSystemResource("bomb.gif").toString()));
         this.setFitHeight(200);
         this.setFitHeight(200);
-        if (health <= 0) {
+        if (hp <= 0) {
             Platform.runLater(() -> {
                 Pane parent = (Pane) this.getParent();
                 if (parent != null) {
                     parent.getChildren().remove(this); // 💥 Remove plant from scene
+                    this.pvzSquare.setPlanted(false);
                 }
             });
-            this.pvzSquare.setPlanted(false);
         }
     }
 
     public void takeDamage(int damage) {
-        this.health = this.health - damage;
+        this.hp -= damage;
         explosion();
     }
 
     public boolean isDied() {
-        if (this.health > 0)
-            return false;
-        return true;
+        return this.hp <= 0;
     }
 }

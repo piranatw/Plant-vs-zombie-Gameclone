@@ -4,7 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import logic.Plantable;
+//import logic.Plantable;
 import logic.Shootable;
 
 public class Bullet extends ImageView {
@@ -22,12 +22,11 @@ public class Bullet extends ImageView {
     }
 
     public void move(Shootable plant) {
-        
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-            	if (plant instanceof Plantable) {
-	                if(((Plantable) plant).isDied()){
+            	if (plant instanceof Plant) {
+	                if(((Plant) plant).isDied()){
                         plant.getBulletPane().getChildren().remove(Bullet.this);
 	                    timer.stop();
 	                }

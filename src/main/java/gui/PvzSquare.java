@@ -67,9 +67,7 @@ public class PvzSquare extends Pane {
     }
 
     // Set reference to the slot from which the plant is selected
-    public void setSlot(Slot slot) {
-        this.currentSlot = slot;
-    }
+
 
     public void plantIfPossible(Slot slot) {
         // Use the provided slot parameter, but fallback to instance variable if necessary
@@ -157,6 +155,9 @@ public class PvzSquare extends Pane {
             System.out.println("Cooldown ended for: " + card.getClass().getSimpleName());
         });
         cooldown.play();
+    }
+    public void setSlot(Slot slot) {
+        this.currentSlot = slot;
     }
 
     public static void setPlantLayer(Pane layer) {

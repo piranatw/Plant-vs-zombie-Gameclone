@@ -18,11 +18,11 @@ import javafx.scene.effect.Glow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import logic.Plantable;
+//import logic.Plantable;
 import javafx.scene.control.Alert.AlertType;
 import main.GameLogic;
 
-public abstract class Zombie extends Characters implements Cloneable {
+public class Zombie extends Characters implements Cloneable {
     protected int health;
     protected TranslateTransition transition;
     protected static ArrayList<Zombie> allzombies = new ArrayList<Zombie>();
@@ -31,7 +31,7 @@ public abstract class Zombie extends Characters implements Cloneable {
     private Timeline movementTimeline;
     private boolean froze = false;
     private Timeline attackTimeline;
-    private static boolean GameOver = false;
+
 
     public Zombie(int health) {
         this.health = health;
@@ -55,7 +55,7 @@ public abstract class Zombie extends Characters implements Cloneable {
         movementTimeline.setCycleCount(Timeline.INDEFINITE);
         movementTimeline.play();
         Thread thread = new Thread(() -> {
-            while (!GameOver) {
+            while (!GameLogic.isGameOver()) {
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e1) {
@@ -65,7 +65,7 @@ public abstract class Zombie extends Characters implements Cloneable {
 
                 if (this.getLayoutX() < -150) {
                     Platform.runLater(() -> {
-                        GameOver = true;
+                        GameLogic.setGameOver(true) ;
                         Alert losingAlert = new Alert(Alert.AlertType.INFORMATION);
                         losingAlert.setHeaderText("Your brain was eaten!!!");
                         losingAlert.setContentText("Try again next time");
@@ -83,7 +83,7 @@ public abstract class Zombie extends Characters implements Cloneable {
         thread.start();
     }
 
-    public void startAttacking(Plantable plant) {
+    public void startAttacking(Plant plant) {
         this.velocity = 0;
 
         if (attackTimeline != null)
