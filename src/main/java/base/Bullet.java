@@ -22,6 +22,7 @@ public class Bullet extends ImageView {
     }
 
     public void move(Shootable plant) {
+        
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {

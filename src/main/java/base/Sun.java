@@ -43,13 +43,13 @@ public class Sun extends ImageView {
         this.transition = new TranslateTransition(javafx.util.Duration.seconds(fallDuration), this);
         this.transition.setByY(fallDistance);
         this.transition.setCycleCount(1);
-        if("normal".equals(name))
-            this.transition.setOnFinished(e -> sunPane.getChildren().remove(this)); // optional auto-remove
+        this.transition.setOnFinished(e -> sunPane.getChildren().remove(this)); // optional auto-remove
         this.transition.play();
 
-//        System.out.println("Sun falling from " + getLayoutX() + ", " + getLayoutY());
+        // System.out.println("Sun falling from " + getLayoutX() + ", " + getLayoutY());
     }
-    public void deleteSun(){
+
+    public void deleteSun() {
         sunPane.getChildren().remove(this);
     }
 

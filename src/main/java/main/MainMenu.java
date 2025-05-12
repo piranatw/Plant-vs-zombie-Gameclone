@@ -32,9 +32,9 @@ public class MainMenu {
         title.setStyle("-fx-effect: dropshadow(gaussian, darkgreen, 4, 0.5, 2, 2);");
 
         // Difficulty buttons
-        Button easyButton = createStyledButton("Easy", 1, 15, "#a3d977", "#b5ec85");
-        Button normalButton = createStyledButton("Normal", 2, 45, "#f4d35e", "#f7e17a");
-        Button hardButton = createStyledButton("Hard", 3, 84, "#ff6b6b", "#ff8787");
+        Button easyButton = createStyledButton("Easy", 1,14, "#a3d977", "#b5ec85");
+        Button normalButton = createStyledButton("Normal", 2, 48, "#f4d35e", "#f7e17a");
+        Button hardButton = createStyledButton("Hard", 3    , 104, "#ff6b6b", "#ff8787");
 
         // Quit button
         Button quitButton = createStyledButton("Quit", "#ff4c4c", "#ff0000");

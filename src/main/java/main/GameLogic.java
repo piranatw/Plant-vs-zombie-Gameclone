@@ -24,7 +24,7 @@ public class GameLogic {
     private Slot slot;
     private VBox root;
 
-    private static int wave = 1;
+    private static int wave = 1, cnt = 0;
     private static int allZombies;
 
     public static GameLogic getInstance() {
@@ -68,13 +68,21 @@ public class GameLogic {
         Timeline sunSpawner = new Timeline(new KeyFrame(Duration.seconds(6), e -> spawnSun()));
         sunSpawner.setCycleCount(Timeline.INDEFINITE);
         sunSpawner.play();
-
         Timeline zombieSpawner = new Timeline();
         for (int i = 0; i < zombiesPerWave; i++) {
-            KeyFrame spawnFrame = new KeyFrame(Duration.seconds(i * 10), e -> spawnZombie());
-
-            if (i > 5) {
-                spawnFrame = new KeyFrame(Duration.seconds(i * 9), e -> spawnZombies(2));
+            KeyFrame spawnFrame = new KeyFrame(Duration.seconds(i * 10), e -> {
+                spawnZombie();
+            });
+            if (i > 25) {
+                spawnFrame = new KeyFrame(Duration.seconds(i * 6), e -> {
+                    spawnZombies(5);
+                    spawnCapZombies(3);
+                });
+            }
+            else if (i > 20) {
+                spawnFrame = new KeyFrame(Duration.seconds(i * 7), e -> {
+                    spawnZombies(4);
+                });
             }
             else if (i > 12) {
                 spawnFrame = new KeyFrame(Duration.seconds(i * 8), e -> {
@@ -82,15 +90,14 @@ public class GameLogic {
                     spawnCapZombie();
                 });
             }
-            else if (i > 20) {
-                spawnFrame = new KeyFrame(Duration.seconds(i * 7), e -> spawnZombies(4));
-            }
-            else if (i > 25) {
-                spawnFrame = new KeyFrame(Duration.seconds(i * 6), e -> {
-                    spawnZombies(5);
-                    spawnCapZombies(3);
+            else if (i > 5) {
+                spawnFrame = new KeyFrame(Duration.seconds(i * 9), e -> {
+                    spawnZombies(2);
                 });
             }
+           
+            
+
             zombieSpawner.getKeyFrames().add(spawnFrame);
         }
         zombieSpawner.play();
@@ -130,6 +137,7 @@ public class GameLogic {
     }
 
     private static void spawnCapZombie() {
+        System.out.println("Cap zombie spawn");
         new Thread(() -> {
             try {
                 Thread.sleep(10000);
@@ -178,7 +186,7 @@ public class GameLogic {
                 if (GameLogic.getAllZombies() == 0) {
                     Platform.runLater(() -> {
                         Alert winningAlert = new Alert(Alert.AlertType.INFORMATION);
-                        winningAlert.setHeaderText("You just defeated all zombies");
+                        winningAlert.setHeaderText("You just defeated all zombies ");
                         winningAlert.setContentText("See you next time");
                         winningAlert.setTitle("VICTORY!!!");
                         winningAlert.showAndWait();
