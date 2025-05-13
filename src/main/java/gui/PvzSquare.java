@@ -6,14 +6,14 @@ import base.Peashooter;
 import base.Potatomine;
 import base.Sunflower;
 import base.Sunny;
-import base.Wallnut;
+import base.Walnut;
 import deck.CherryBombCard;
 import deck.FrostyPeaShooterCard;
 import deck.PeaShooterCard;
 import deck.PlantsCard;
 import deck.PotatoMineCard;
 import deck.SunflowerCard;
-import deck.WallnutCard;
+import deck.WalnutCard;
 import javafx.animation.PauseTransition;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -35,7 +35,7 @@ public class PvzSquare extends Pane {
     private Peashooter peashooter;
     private FrostyPeashooter frostyshooter;
     private Potatomine potatomine;
-    private Wallnut wallnut;
+    private Walnut walnut;
     private Cherrybomb cherry;
     private Sunflower sunflower;
 
@@ -130,9 +130,9 @@ public class PvzSquare extends Pane {
         } else if (card instanceof FrostyPeaShooterCard) {
             frostyshooter = new FrostyPeashooter(bulletLayer, bulletLayerX, bulletLayerY, this);
             plantLayer.getChildren().add(frostyshooter);
-        } else if (card instanceof WallnutCard) {
-            wallnut = new Wallnut(bulletLayer, bulletLayerX, bulletLayerY, this);
-            plantLayer.getChildren().add(wallnut);
+        } else if (card instanceof WalnutCard) {
+            walnut = new Walnut(bulletLayer, bulletLayerX, bulletLayerY, this);
+            plantLayer.getChildren().add(walnut);
         } else if (card instanceof CherryBombCard) {
             cherry = new Cherrybomb(bulletLayer, bulletLayerX, bulletLayerY, this);
             plantLayer.getChildren().add(cherry);

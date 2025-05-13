@@ -2,8 +2,8 @@ package deck;
 
 import javafx.scene.image.Image;
 
-public class WallnutCard extends PlantsCard{
-    public WallnutCard(){
+public class WalnutCard extends PlantsCard{
+    public WalnutCard(){
         super(20,50);
         String imagePath = "wallnutCard.jpg";
         String resourceURL = ClassLoader.getSystemResource(imagePath).toString();

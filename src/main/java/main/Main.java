@@ -15,6 +15,12 @@ public class Main extends Application {
         primaryStage.setScene(menuScene);
         primaryStage.setTitle("Plants vs. Zombies - Main Menu");
         primaryStage.setResizable(false);
+        primaryStage.setOnCloseRequest(event -> {
+            System.out.println("Window is closing...");
+            javafx.application.Platform.exit();
+            System.exit(0);
+        });
+        
         primaryStage.show();
     }
 

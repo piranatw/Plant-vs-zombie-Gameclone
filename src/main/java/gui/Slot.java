@@ -6,7 +6,7 @@ import deck.PeaShooterCard;
 import deck.PlantsCard;
 import deck.PotatoMineCard;
 import deck.SunflowerCard;
-import deck.WallnutCard;
+import deck.WalnutCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
@@ -36,7 +36,7 @@ public class Slot extends HBox {
         cards = new PlantsCard[] {
             new SunflowerCard(),
             new PeaShooterCard(),
-            new WallnutCard(),
+            new WalnutCard(),
             new CherryBombCard(),
             new PotatoMineCard(),
             new FrostyPeaShooterCard()

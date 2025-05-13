@@ -5,10 +5,10 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
-public class Wallnut extends Plant {
+public class Walnut extends Plant {
     private Pane bulletPane;
 
-    public Wallnut(Pane bulletPane, double x, double y, PvzSquare pvzSquare) {
+    public Walnut(Pane bulletPane, double x, double y, PvzSquare pvzSquare) {
         super(200, x, y, 10, pvzSquare);  // Using parent constructor
         this.bulletPane = bulletPane;
         this.setLayoutX(x);
